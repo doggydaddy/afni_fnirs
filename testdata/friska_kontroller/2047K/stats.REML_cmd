@@ -1,0 +1,7 @@
+# 3dDeconvolve -input testdata/friska_kontroller/2047K/prp_2047K.hbr.mem.fnirs.nii -mask ../../templates/biopac16ch_template_mask.nii -num_stimts 1 -stim_times_AM1 1 testdata/friska_kontroller/2047K/2047K.hbr.mem.timing.1D dmBLOCK -stim_label 1 mem -jobs 16 -gltsym 'SYM: mem' -glt_label 1 mem -fout -tout -x1D testdata/friska_kontroller/2047K/X.xmat.1D -xjpeg testdata/friska_kontroller/2047K/X.jpg -x1D_uncensored X.nocensor.xmat.1D -fitts testdata/friska_kontroller/2047K/fitts.2047K.hbr.mem.nii.gz -errts testdata/friska_kontroller/2047K/errts.2047K.hbr.mem.nii.gz -bucket testdata/friska_kontroller/2047K/stats.2047K.hbr.mem.nii.gz
+
+3dREMLfit -matrix testdata/friska_kontroller/2047K/X.xmat.1D -input testdata/friska_kontroller/2047K/prp_2047K.hbr.mem.fnirs.nii \
+ -mask ../../templates/biopac16ch_template_mask.nii \
+ -fout -tout -Rbuck testdata/friska_kontroller/2047K/stats.2047K.hbr.mem_REML -Rvar testdata/friska_kontroller/2047K/stats.2047K.hbr.mem_REMLvar \
+ -Rfitts testdata/friska_kontroller/2047K/fitts.2047K.hbr.mem_REML \
+ -Rerrts testdata/friska_kontroller/2047K/errts.2047K.hbr.mem_REML -verb $*

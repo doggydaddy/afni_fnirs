@@ -1,0 +1,40 @@
+fnirSoft:	Exported Text File
+Version:	4.2
+ExportDate:	12/18/2023 11:37:17 AM
+VariableInfo
+Name:	oxygraph42.Marker1
+Size:	26 x 2
+Type:	Numeric
+Content:	Marker
+Date:	12/18/2023 11:37:06 AM
+Notes:	Marker saved by Oxygraph from files C:\Users\Anette Johansson\Documents\COBI Studio Data\friska kontroller\2047K\ANETTE_2047K_3_05270841.oxy, C:\Users\Anette Johansson\Documents\COBI Studio Data\friska kontroller\2047K\ANETTE_2047K_3_05270841_C.mrk
+Labels:	MARKER
+VariableData
+Marker	Marker
+MarkerTime	MarkerType
+46.446	-5
+60.841	101
+153.427	101
+227.918	102
+285.248	103
+355.152	104
+436.725	105
+533.992	106
+557.486	3
+563.055	2
+563.367	10
+563.616	2
+563.835	10
+565.925	10
+566.534	5
+568.515	2
+568.827	10
+605.004	7
+608.155	2
+608.514	10
+609.075	4
+609.824	7
+614.707	7
+664.424	107
+1030.247	108
+1034.827	-1

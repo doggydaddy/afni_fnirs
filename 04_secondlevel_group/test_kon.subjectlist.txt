@@ -1,0 +1,6 @@
+../03_firstlevel_glm/testdata/friska_kontroller/2011K/stats.2011K.hbr.mem.nii.gz
+../03_firstlevel_glm/testdata/friska_kontroller/2011K/stats.2011K.hbo.mem.nii.gz
+../03_firstlevel_glm/testdata/friska_kontroller/2047K/stats.2047K.hbo.mem.nii.gz
+../03_firstlevel_glm/testdata/friska_kontroller/2047K/stats.2047K.hbr.mem.nii.gz
+../03_firstlevel_glm/testdata/friska_kontroller/2034K/stats.2034K.hbo.mem.nii.gz
+../03_firstlevel_glm/testdata/friska_kontroller/2034K/stats.2034K.hbr.mem.nii.gz

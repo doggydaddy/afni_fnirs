@@ -1,0 +1,15 @@
+fnirSoft:	Exported Text File
+Version:	4.2
+ExportDate:	12/18/2023 12:16:54 PM
+VariableInfo
+Name:	oxygraph33.Info1("MeanPeriod")
+Size:	1 x 1
+Type:	Numeric
+Content:	Generic
+Date:	12/18/2023 12:16:45 PM
+Notes:	
+Labels:	
+VariableData
+Generic
+
+0.51

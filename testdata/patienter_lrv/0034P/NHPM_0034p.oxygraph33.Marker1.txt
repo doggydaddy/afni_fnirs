@@ -1,0 +1,25 @@
+fnirSoft:	Exported Text File
+Version:	4.2
+ExportDate:	12/18/2023 12:16:54 PM
+VariableInfo
+Name:	oxygraph33.Marker1
+Size:	11 x 2
+Type:	Numeric
+Content:	Marker
+Date:	12/18/2023 12:16:45 PM
+Notes:	Marker saved by Oxygraph from files C:\Users\Anette Johansson\Documents\COBI Studio Data\LRV patienter\0034p_group1_R\NHPM_0034p.oxy, C:\Users\Anette Johansson\Documents\COBI Studio Data\LRV patienter\0034p_group1_R\NHPM_0034p.mrk
+Labels:	MARKER
+VariableData
+Marker	Marker
+MarkerTime	MarkerType
+24.535	-5
+35.927	101
+136.095	101
+188.745	102
+296.589	103
+407.459	104
+531.495	105
+676.623	106
+714.001	107
+1118.059	108
+1214.805	-1

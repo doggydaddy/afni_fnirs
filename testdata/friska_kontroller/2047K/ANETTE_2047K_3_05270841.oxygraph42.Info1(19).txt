@@ -1,0 +1,13 @@
+fnirSoft:	Exported Text File
+Version:	4.2
+ExportDate:	12/18/2023 11:37:17 AM
+VariableInfo
+Name:	oxygraph42.Info1("Gains")
+Size:	2 chars
+Type:	String
+Content:	Text
+Date:	12/18/2023 11:37:06 AM
+Notes:	
+Labels:	
+VariableData
+10

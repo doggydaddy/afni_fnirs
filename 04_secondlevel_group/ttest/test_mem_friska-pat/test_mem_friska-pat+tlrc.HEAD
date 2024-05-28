@@ -1,0 +1,132 @@
+
+type = string-attribute
+name = HISTORY_NOTE
+count = 1524
+'[doggydaddy@albedo: Tue May 28 10:38:12 2024] {AFNI_24.0.10:linux_ubuntu_16_64} 3dttest++ -prefix test_mem_friska-pat -mask biopac16ch_template_mask.nii -AminusB -setA test_kon stats.2011K.hbr.mem.nii.gz '../03_firstlevel_glm/testdata/friska_kontroller/2011K/stats.2011K.hbr.mem.nii.gz[4]' stats.2011K.hbo.mem.nii.gz '../03_firstlevel_glm/testdata/friska_kontroller/2011K/stats.2011K.hbo.mem.nii.gz[4]' stats.2047K.hbo.mem.nii.gz '../03_firstlevel_glm/testdata/friska_kontroller/2047K/stats.2047K.hbo.mem.nii.gz[4]' stats.2047K.hbr.mem.nii.gz '../03_firstlevel_glm/testdata/friska_kontroller/2047K/stats.2047K.hbr.mem.nii.gz[4]' stats.2034K.hbo.mem.nii.gz '../03_firstlevel_glm/testdata/friska_kontroller/2034K/stats.2034K.hbo.mem.nii.gz[4]' stats.2034K.hbr.mem.nii.gz '../03_firstlevel_glm/testdata/friska_kontroller/2034K/stats.2034K.hbr.mem.nii.gz[4]' -setB test_pat stats.0049P.hbr.mem.nii.gz '../03_firstlevel_glm/testdata/patienter_lrv/0049P/stats.0049P.hbr.mem.nii.gz[4]' stats.0049P.hbo.mem.nii.gz '../03_firstlevel_glm/testdata/patienter_lrv/0049P/stats.0049P.hbo.mem.nii.gz[4]' stats.0034P.hbo.mem.nii.gz '../03_firstlevel_glm/testdata/patienter_lrv/0034P/stats.0034P.hbo.mem.nii.gz[4]' stats.0034P.hbr.mem.nii.gz '../03_firstlevel_glm/testdata/patienter_lrv/0034P/stats.0034P.hbr.mem.nii.gz[4]' stats.0003P.hbo.mem.nii.gz '../03_firstlevel_glm/testdata/patienter_lrv/0003P/stats.0003P.hbo.mem.nii.gz[4]' stats.0003P.hbr.mem.nii.gz '../03_firstlevel_glm/testdata/patienter_lrv/0003P/stats.0003P.hbr.mem.nii.gz[4]'~
+
+type = string-attribute
+name = TYPESTRING
+count = 15
+'3DIM_HEAD_FUNC~
+
+type = string-attribute
+name = IDCODE_STRING
+count = 27
+'AFN_CvsMTon4ab0zUuws3kK7sQ~
+
+type = string-attribute
+name = IDCODE_DATE
+count = 25
+'Tue May 28 10:38:12 2024~
+
+type = integer-attribute
+name = SCENE_DATA
+count = 8
+ 2 11 1 -999 -999
+ -999 -999 -999
+
+type = string-attribute
+name = LABEL_1
+count = 5
+'zyxt~
+
+type = string-attribute
+name = LABEL_2
+count = 5
+'zyxt~
+
+type = string-attribute
+name = DATASET_NAME
+count = 5
+'zyxt~
+
+type = integer-attribute
+name = ORIENT_SPECIFIC
+count = 3
+ 0 5 2
+
+type  = float-attribute
+name  = ORIGIN
+count = 3
+           -124          129.5            141
+
+type  = float-attribute
+name  = DELTA
+count = 3
+             13            -20            -13
+
+type  = float-attribute
+name  = IJK_TO_DICOM
+count = 12
+             13              0              0           -124              0
+              0            -13            141              0            -20
+              0          129.5
+
+type  = float-attribute
+name  = IJK_TO_DICOM_REAL
+count = 12
+             13              0              0           -124              0
+              0            -13            141              0            -20
+              0          129.5
+
+type  = float-attribute
+name  = BRICK_STATS
+count = 12
+  -0.0001968491   6.586396e-05      -2.980507      0.4925157  -0.0001806627
+    4.72752e-05      -2.747198      0.4220865  -4.074625e-05   0.0001055998
+      -1.253934       1.941084
+
+type = integer-attribute
+name = DATASET_RANK
+count = 8
+ 3 6 0 0 0
+ 0 0 0
+
+type = integer-attribute
+name = DATASET_DIMENSIONS
+count = 5
+ 20 13 20 0 0
+
+type = integer-attribute
+name = BRICK_TYPES
+count = 6
+ 3 3 3 3 3
+ 3
+
+type  = float-attribute
+name  = BRICK_FLOAT_FACS
+count = 6
+              0              0              0              0              0
+              0
+
+type = string-attribute
+name = BRICK_LABS
+count = 105
+'test_kon-test_pat_mean~test_kon-test_pat_Tstat~test_kon_mean~test_kon_Tstat~test_pat_mean~test_pat_Tstat~
+
+type  = float-attribute
+name  = BRICK_STATAUX
+count = 12
+              1              3              1             10              3
+              3              1              5              5              3
+              1              5
+
+type = string-attribute
+name = BRICK_STATSYM
+count = 43
+'none;Ttest(10);none;Ttest(5);none;Ttest(5)~
+
+type = string-attribute
+name = TEMPLATE_SPACE
+count = 4
+'MNI~
+
+type = integer-attribute
+name = INT_CMAP
+count = 1
+ 0
+
+type = string-attribute
+name = BYTEORDER_STRING
+count = 10
+'LSB_FIRST~

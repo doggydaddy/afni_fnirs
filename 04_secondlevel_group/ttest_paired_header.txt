@@ -1,0 +1,5 @@
+#!/bin/bash
+
+3dttest++ -prefix REPLACE \
+          -mask MASK \
+          -paired \
