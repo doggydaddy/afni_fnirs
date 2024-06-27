@@ -2,11 +2,11 @@
 
 ./gen_ttest.sh testdata \
 		biopac16ch_template_mask.nii \
-		test_kon.subjectlist.txt \
-		test_pat.subjectlist.txt \
+		con.hbr.sublist.txt \
+		lrv.hbr.sublist.txt \
 		no \
 		4 \
 		4 \
 		ttest \
-		test_mem_friska-pat
+	    mem_hbr_con-lrv
 

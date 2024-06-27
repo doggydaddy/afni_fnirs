@@ -17,7 +17,7 @@ for f in $filelist; do
     c=1
     for b in $blocks
     do
-        echo $b "into: " > ${i_path}/${subj_id}.${type_id}.${task_id}.block${c}.1D
+        echo $b " " > ${i_path}/${subj_id}.${type_id}.${task_id}.block${c}.1D
         c=$(($c+1))
     done
 done
