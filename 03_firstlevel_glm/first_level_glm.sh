@@ -40,25 +40,6 @@ echo "task_id = " $task_id
 
 
 # this is an example if you wish to perform per-block contrasts
-
-#3dDeconvolve -input ${input_nii} \
-#    -mask ${mask_nii} \
-#    -num_stimts 5 \
-#    -stim_times_AM1 1 ${i_path}/${subj_id}.${type_id}.${task_id}.block1.1D 'dmBLOCK' -stim_label 1 b1 \
-#    -stim_times_AM1 2 ${i_path}/${subj_id}.${type_id}.${task_id}.block2.1D 'dmBLOCK' -stim_label 2 b2 \
-#    -stim_times_AM1 3 ${i_path}/${subj_id}.${type_id}.${task_id}.block3.1D 'dmBLOCK' -stim_label 3 b3 \
-#    -stim_times_AM1 4 ${i_path}/${subj_id}.${type_id}.${task_id}.block4.1D 'dmBLOCK' -stim_label 4 b4 \
-#    -stim_times_AM1 5 ${i_path}/${subj_id}.${type_id}.${task_id}.block5.1D 'dmBLOCK' -stim_label 5 b5 \
-#    -jobs 16 \
-#    -gltsym 'SYM: +0.2*b1 +0.2*b2 +0.2*b3 +0.2*b4 +0.2*b5'  -glt_label 1 mem \
-#    -gltsym 'SYM: +b5 -b1'                                  -glt_label 2 b5-b1 \
-#    -gltsym 'SYM: b1 -0.25*b2 -0.25*b3 -0.25*b4 -0.25*b5'   -glt_label 3 b1-b25) \
-#    -fout -tout -x1D ${i_path}/X.xmat.1D -xjpeg ${i_path}/X.jpg \
-#    -x1D_uncensored X.nocensor.xmat.1D \
-#    -fitts ${i_path}/fitts.${pset}_${subj}_${task}.nii.gz \
-#    -errts ${i_path}/errts.${pset}_${subj}_${task}.nii.gz \
-#    -bucket ${i_path}/stats.${pset}_${subj}_${task}.nii.gz 
-
 # use this you wish to perform per-block corsi score 
 # modulated amplitude block in your contrasts
 
@@ -77,14 +58,30 @@ echo "task_id = " $task_id
 #    -x1D_uncensored X.nocensor.xmat.1D \
 #    -bucket ${i_path}/stats.${subj_id}_${type_id}_${task_id}.nii.gz 
 
+
+#3dDeconvolve -input ${input_nii} \
+#             -polort 6 -GOFORIT 6 -noFDR \
+#             -mask ${mask_nii} \
+#             -num_stimts 1 \
+#             -stim_times_AM1 1 ${i_path}/${subj_id}.${type_id}.${task_id}.model.1D 'dmBLOCK' -stim_label 1 corsi -local_times \
+#             -jobs 16 \
+#             -gltsym 'SYM: corsi' -glt_label 1 corsi \
+#             -tout \
+#             -bucket ${i_path}/stats.${subj_id}.${type_id}.${task_id}.nii.gz \
+
+
 3dDeconvolve -input ${input_nii} \
              -polort 6 -GOFORIT 6 -noFDR \
              -mask ${mask_nii} \
-             -num_stimts 1 \
-             -stim_times_AM1 1 ${i_path}/${subj_id}.${type_id}.${task_id}.model.1D 'dmBLOCK' -stim_label 1 corsi -local_times \
+             -num_stimts 2 \
+             -stim_times_AM1 1 ${i_path}/${subj_id}.${type_id}.${task_id}.model.b2-3.1D 'dmBLOCK' -stim_label 1 corsi_easy -local_times \
+             -stim_times_AM1 2 ${i_path}/${subj_id}.${type_id}.${task_id}.model.b4-5.1D 'dmBLOCK' -stim_label 2 corsi_hard -local_times \
              -jobs 16 \
-             -gltsym 'SYM: corsi' -glt_label 1 corsi \
+             -gltsym 'SYM: -corsi_easy +corsi_hard' -glt_label 1 hard-easy \
+             -gltsym 'SYM: +0.5*corsi_easy +0.5*corsi_hard' -glt_label 2 corsi \
              -tout \
              -bucket ${i_path}/stats.${subj_id}.${type_id}.${task_id}.nii.gz \
 
+
+# cleanup
 rm Decon*

@@ -6,6 +6,10 @@
 datadir=$1          # 1. <data directory>
 csv_file=$2         # 2. <corsi results csv>
 
+output_affix="model.b2-5.1D"
+output_affix1="model.b2-3.1D"
+output_affix2="model.b4-5.1D"
+
 filelist=`find $datadir -name '*.timing.1D'`
 
 for f in $filelist
@@ -34,6 +38,7 @@ do
 
         if [ "$c" -eq 1 ]; then
             echo "skip first block"
+            #echo $b > ${i_path}/${subj_id}.${type_id}.${task_id}.model.mD
         elif [ "$c" -eq 2 ]; then
             echo $modded_block > ${i_path}/${subj_id}.${type_id}.${task_id}.model.mD
         elif [ "$c" -eq 5 ]; then
@@ -43,6 +48,18 @@ do
         fi
         c=$(($c+1))
     done
-    awk '{printf "%s ", $0}' ${i_path}/${subj_id}.${type_id}.${task_id}.model.mD > ${i_path}/${subj_id}.${type_id}.${task_id}.model.1D
+    # save one file
+    single_line=`awk '{printf "%s ", $0}' ${i_path}/${subj_id}.${type_id}.${task_id}.model.mD`
+    echo $single_line > ${i_path}/${subj_id}.${type_id}.${task_id}.${output_affix}
+
+    # split and save multiple files
+    # Split the input at the second space and save the two parts into two variables.
+    line1=$(echo "$single_line" | sed 's/ /§/2; s/§.*//')    # Extract text before the second space.
+    line2=$(echo "$single_line" | sed 's/^[^ ]* [^ ]* //')
+    # Save each line into a separate file.
+    echo "$line1" > ${i_path}/${subj_id}.${type_id}.${task_id}.${output_affix1}
+    echo "$line2" > ${i_path}/${subj_id}.${type_id}.${task_id}.${output_affix2}
+    
+    # cleanup
     rm ${i_path}/${subj_id}.${type_id}.${task_id}.model.mD
 done

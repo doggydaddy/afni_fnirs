@@ -7,8 +7,8 @@
 			   lrv.hbr.sublist.txt \
 			   pcon.hbr.sublist.txt \
 			   no \
-			   1 \
-			   1 \
+			   5 \
+			   5 \
 			   ttest \
 	 		   corsi_hbr_lrv-pcon
 # pcon-lrv
@@ -17,8 +17,8 @@
 			   lrv.hbr.sublist.txt \
 			   con.hbr.sublist.txt \
 			   no \
-			   1 \
-			   1 \
+			   5 \
+			   5 \
 			   ttest \
 	 		   corsi_hbr_lrv-con
 # con-pcon
@@ -27,8 +27,8 @@
 			   pcon.hbr.sublist.txt \
 			   con.hbr.sublist.txt \
 			   no \
-			   1 \
-			   1 \
+			   5 \
+			   5 \
 			   ttest \
 	 		   corsi_hbr_pcon-con
 
@@ -39,8 +39,8 @@
 			   lrv.hbo.sublist.txt \
 			   pcon.hbo.sublist.txt \
 			   no \
-			   1 \
-			   1 \
+			   5 \
+			   5 \
 			   ttest \
 	 		   corsi_hbo_lrv-pcon
 # pcon-lrv
@@ -49,8 +49,8 @@
 			   lrv.hbo.sublist.txt \
 			   con.hbo.sublist.txt \
 			   no \
-			   1 \
-			   1 \
+			   5 \
+			   5 \
 			   ttest \
 	 		   corsi_hbo_lrv-con
 # con-pcon
@@ -59,7 +59,7 @@
 			   pcon.hbo.sublist.txt \
 			   con.hbo.sublist.txt \
 			   no \
-			   1 \
-			   1 \
+			   5 \
+			   5 \
 			   ttest \
 	 		   corsi_hbo_pcon-con
