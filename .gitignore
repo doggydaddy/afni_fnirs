@@ -1,4 +1,4 @@
-testdata/
-04_secondlevel_group/ttest/
-04_secondlevel_group/*subjectlist.txt
+04_secondlevel_group/ttest*/
+04_secondlevel_group/
+
 

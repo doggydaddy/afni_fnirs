@@ -26,17 +26,18 @@ echo "task_id = " $task_id
 # note, add confounding variables:
 # -stim_file 10 ${i_path}/${subj}_${ses}_${task}_white_matter_noHead.txt'[0]' -stim_base 10 -stim_label 10 wm \
 
-3dDeconvolve -input ${input_nii} \
-             -mask ${mask_nii} \
-             -num_stimts 1 \
-             -stim_times_AM1 1 ${i_path}/${subj_id}.${type_id}.${task_id}.timing.1D 'dmBLOCK' -stim_label 1 mem \
-             -jobs 16 \
-             -gltsym 'SYM: mem' -glt_label 1 mem \
-             -fout -tout -x1D ${i_path}/X.xmat.1D -xjpeg ${i_path}/X.jpg \
-             -x1D_uncensored X.nocensor.xmat.1D \
-             -fitts ${i_path}/fitts.${subj_id}.${type_id}.${task_id}.nii.gz \
-             -errts ${i_path}/errts.${subj_id}.${type_id}.${task_id}.nii.gz \
-             -bucket ${i_path}/stats.${subj_id}.${type_id}.${task_id}.nii.gz
+#3dDeconvolve -input ${input_nii} \
+#             -mask ${mask_nii} \
+#             -num_stimts 1 \
+#             -stim_times_AM1 1 ${i_path}/${subj_id}.${type_id}.${task_id}.timing.1D 'dmBLOCK' -stim_label 1 mem \
+#             -jobs 16 \
+#             -gltsym 'SYM: mem' -glt_label 1 mem \
+#             -fout -tout -x1D ${i_path}/X.xmat.1D -xjpeg ${i_path}/X.jpg \
+#             -x1D_uncensored X.nocensor.xmat.1D \
+#             -fitts ${i_path}/fitts.${subj_id}.${type_id}.${task_id}.nii.gz \
+#             -errts ${i_path}/errts.${subj_id}.${type_id}.${task_id}.nii.gz \
+#             -bucket ${i_path}/stats.${subj_id}.${type_id}.${task_id}.nii.gz
+
 
 # this is an example if you wish to perform per-block contrasts
 
@@ -46,8 +47,8 @@ echo "task_id = " $task_id
 #    -stim_times_AM1 1 ${i_path}/${subj_id}.${type_id}.${task_id}.block1.1D 'dmBLOCK' -stim_label 1 b1 \
 #    -stim_times_AM1 2 ${i_path}/${subj_id}.${type_id}.${task_id}.block2.1D 'dmBLOCK' -stim_label 2 b2 \
 #    -stim_times_AM1 3 ${i_path}/${subj_id}.${type_id}.${task_id}.block3.1D 'dmBLOCK' -stim_label 3 b3 \
-#    -stim_times_AM1 4 ${i_path}/${subj_id}.${type_id}.${task_id}.block4.1D 'dmBLOCK' -stim_label 2 b4 \
-#    -stim_times_AM1 5 ${i_path}/${subj_id}.${type_id}.${task_id}.block5.1D 'dmBLOCK' -stim_label 3 b5 \
+#    -stim_times_AM1 4 ${i_path}/${subj_id}.${type_id}.${task_id}.block4.1D 'dmBLOCK' -stim_label 4 b4 \
+#    -stim_times_AM1 5 ${i_path}/${subj_id}.${type_id}.${task_id}.block5.1D 'dmBLOCK' -stim_label 5 b5 \
 #    -jobs 16 \
 #    -gltsym 'SYM: +0.2*b1 +0.2*b2 +0.2*b3 +0.2*b4 +0.2*b5'  -glt_label 1 mem \
 #    -gltsym 'SYM: +b5 -b1'                                  -glt_label 2 b5-b1 \
@@ -57,3 +58,33 @@ echo "task_id = " $task_id
 #    -fitts ${i_path}/fitts.${pset}_${subj}_${task}.nii.gz \
 #    -errts ${i_path}/errts.${pset}_${subj}_${task}.nii.gz \
 #    -bucket ${i_path}/stats.${pset}_${subj}_${task}.nii.gz 
+
+# use this you wish to perform per-block corsi score 
+# modulated amplitude block in your contrasts
+
+#3dDeconvolve -input ${input_nii} \
+#    -polort 5 -GOFORIT 6 -noFDR \
+#    -mask ${mask_nii} \
+#    -num_stimts 5 \
+#    -stim_times_AM1 1 ${i_path}/${subj_id}.${type_id}.${task_id}.mblock1.1D 'dmBLOCK(1)' -stim_label 1 'b1' -global_times \
+#    -stim_times_AM1 2 ${i_path}/${subj_id}.${type_id}.${task_id}.mblock2.1D 'dmBLOCK(1)' -stim_label 2 'b2' -global_times \
+#    -stim_times_AM1 3 ${i_path}/${subj_id}.${type_id}.${task_id}.mblock3.1D 'dmBLOCK(1)' -stim_label 3 'b3' -global_times \
+#    -stim_times_AM1 4 ${i_path}/${subj_id}.${type_id}.${task_id}.mblock4.1D 'dmBLOCK(1)' -stim_label 4 'b4' -global_times \
+#    -stim_times_AM1 5 ${i_path}/${subj_id}.${type_id}.${task_id}.mblock5.1D 'dmBLOCK(1)' -stim_label 5 'b5' -global_times \
+#    -jobs 16 \
+#    -gltsym 'SYM: +0.25*b2 +0.25*b3 +0.25*b4 +0.25*b5' -glt_label 1 b2-5 \
+#    -fout -tout -x1D ${i_path}/X.xmat.1D -xjpeg ${i_path}/X.jpg \
+#    -x1D_uncensored X.nocensor.xmat.1D \
+#    -bucket ${i_path}/stats.${subj_id}_${type_id}_${task_id}.nii.gz 
+
+3dDeconvolve -input ${input_nii} \
+             -polort 6 -GOFORIT 6 -noFDR \
+             -mask ${mask_nii} \
+             -num_stimts 1 \
+             -stim_times_AM1 1 ${i_path}/${subj_id}.${type_id}.${task_id}.model.1D 'dmBLOCK' -stim_label 1 corsi -local_times \
+             -jobs 16 \
+             -gltsym 'SYM: corsi' -glt_label 1 corsi \
+             -tout \
+             -bucket ${i_path}/stats.${subj_id}.${type_id}.${task_id}.nii.gz \
+
+rm Decon*

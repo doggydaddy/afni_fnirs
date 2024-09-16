@@ -17,7 +17,8 @@ if [[ "${is_paired}" == "paired" ]]; then
 else
     cat ttest_header.txt | sed "s/REPLACE/${prefix}/g" > cmd.sh
 fi
-sed -i 's/MASK/'"${mask}"'/g' cmd.sh
+
+sed -i "s|MASK|'$mask'|g" cmd.sh
 
 gA=`cat ${gA_filelist}`
 gB=`cat ${gB_filelist}`
@@ -31,7 +32,8 @@ for i in $gA; do
     i_path=$(dirname "${i}")
     i_name=$(basename "${i}")
     subj=`echo ${i_name} | cut -d'_' -f2`
-    echo "      ${subj} $i'[$volA]' \\" >> cmd.sh
+    subj_id=`echo ${subj}} | cut -d'.' -f2`
+    echo "      ${subj_id} $i'[$volA]' \\" >> cmd.sh
 done
 
 echo "		-setB $gB_prefix \\" >> cmd.sh
@@ -39,7 +41,8 @@ for i in $gB; do
     i_path=$(dirname "${i}")
     i_name=$(basename "${i}")
     subj=`echo ${i_name} | cut -d'_' -f2`
-    echo "      ${subj} $i'[$volB]' \\" >> cmd.sh
+    subj_id=`echo ${subj} | cut -d'.' -f2`
+    echo "      ${subj_id} $i'[$volB]' \\" >> cmd.sh
 done
 
 # finishing touches
@@ -47,7 +50,7 @@ sed '$ s/.$//' cmd.sh
 chmod +x cmd.sh
 
 # print command
-cat cmd.sh
+#cat cmd.sh
 # run command
 ./cmd.sh
 

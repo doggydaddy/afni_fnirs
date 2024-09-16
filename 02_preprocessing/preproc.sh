@@ -6,13 +6,14 @@
 #
 # pre-processes ALL *.nii files in <data_directory>
 
-data_folder=$1                              # first argument is <data_directory>
+data_folder=$1                                # first argument is <data_directory>
 all_niis=`find ${data_folder} -name '*.nii'`  # grab ALL files with .nii extension and puts them in a list
 echo $all_niis
 
-for nii in $all_niis; do
-                                            # for each .nii file, perform the following:
-   
+for nii in $all_niis; 
+do
+    # for each .nii file, perform the following:
+
     # first, we need to get the filename and file path
     filepath=$(dirname "$nii")
     filename=$(basename "$nii")

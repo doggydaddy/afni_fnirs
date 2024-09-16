@@ -1,7 +1,0 @@
-# 3dDeconvolve -input ../../data/patienter_kontroll/1032KP/prp_1032KP.hbr.mem.fnirs.nii -mask ../templates/biopac16ch_template_compactMask.nii -num_stimts 1 -stim_times_AM1 1 ../../data/patienter_kontroll/1032KP/1032KP.hbr.mem.timing.1D dmBLOCK -stim_label 1 mem -jobs 16 -gltsym 'SYM: mem' -glt_label 1 mem -fout -tout -x1D ../../data/patienter_kontroll/1032KP/X.xmat.1D -xjpeg ../../data/patienter_kontroll/1032KP/X.jpg -x1D_uncensored X.nocensor.xmat.1D -fitts ../../data/patienter_kontroll/1032KP/fitts.1032KP.hbr.mem.nii.gz -errts ../../data/patienter_kontroll/1032KP/errts.1032KP.hbr.mem.nii.gz -bucket ../../data/patienter_kontroll/1032KP/stats.1032KP.hbr.mem.nii.gz
-
-3dREMLfit -matrix ../../data/patienter_kontroll/1032KP/X.xmat.1D -input ../../data/patienter_kontroll/1032KP/prp_1032KP.hbr.mem.fnirs.nii \
- -mask ../templates/biopac16ch_template_compactMask.nii \
- -fout -tout -Rbuck ../../data/patienter_kontroll/1032KP/stats.1032KP.hbr.mem_REML -Rvar ../../data/patienter_kontroll/1032KP/stats.1032KP.hbr.mem_REMLvar \
- -Rfitts ../../data/patienter_kontroll/1032KP/fitts.1032KP.hbr.mem_REML \
- -Rerrts ../../data/patienter_kontroll/1032KP/errts.1032KP.hbr.mem_REML -verb $*
