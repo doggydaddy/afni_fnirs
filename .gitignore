@@ -5,3 +5,11 @@
 04_secondlevel_group/brain.nii
 *Result*
 
+
+# Python virtual environments (any depth)
+.venv/
+**/.venv/
+
+# Python caches
+__pycache__/
+*.pyc
