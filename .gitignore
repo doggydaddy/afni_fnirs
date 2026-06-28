@@ -13,3 +13,15 @@
 # Python caches
 __pycache__/
 *.pyc
+
+# AFNI trash files
+**.xmat.1D
+
+# log and swap files
+*.log
+*.swp
+*log.txt
+
+# data specific analysis and notes
+*result*
+*archive*

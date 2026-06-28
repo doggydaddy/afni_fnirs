@@ -8,10 +8,10 @@ SCRIPT=analyze_psd_agg_vs_psd_nagg.py
 COVARS_HC="sans saps wais_matrix sud"
 COVARS_PSD="sans saps wais_matrix sud dose"
 
-echo "====== PSD+AGG vs HC — v5 (LRV hard-easy) ======"
+echo "====== PSD+AGG vs HC — hard-easy ======"
 $PY $SCRIPT \
     --input lrv-con_v5_allchannels.csv \
-    --output-dir results_psd_agg_vs_hc_lrv_v5 \
+    --output-dir results_psd_agg_vs_hc_hard_easy \
     --group-pos "PSD+AGG" \
     --group-neg "HC" \
     --covariates ${=COVARS_HC} \
@@ -19,10 +19,10 @@ $PY $SCRIPT \
     --alpha 0.05
 
 echo ""
-echo "====== PSD+AGG vs HC — v7 (LRV corsi_GLT) ======"
+echo "====== PSD+AGG vs HC — corsi ======"
 $PY $SCRIPT \
     --input lrv-con_v7_allchannels.csv \
-    --output-dir results_psd_agg_vs_hc_lrv_v7 \
+    --output-dir results_psd_agg_vs_hc_corsi \
     --group-pos "PSD+AGG" \
     --group-neg "HC" \
     --covariates ${=COVARS_HC} \
@@ -30,28 +30,28 @@ $PY $SCRIPT \
     --alpha 0.05
 
 echo ""
-echo "====== PSD+AGG vs PSD-AGG — v5 (LRV hard-easy) ======"
+echo "====== PSD+AGG vs PSD-AGG — hard-easy ======"
 $PY $SCRIPT \
     --input lrv-pcon_v5_allchannels.csv \
-    --output-dir results_psd_agg_lrv_v5 \
+    --output-dir results_psd_agg_vs_psd_nagg_hard_easy \
     --covariates ${=COVARS_PSD} \
     --interactions \
     --alpha 0.05
 
 echo ""
-echo "====== PSD+AGG vs PSD-AGG — v7 (LRV corsi_GLT) ======"
+echo "====== PSD+AGG vs PSD-AGG — corsi ======"
 $PY $SCRIPT \
     --input lrv-pcon_v7_allchannels.csv \
-    --output-dir results_psd_agg_lrv_v7 \
+    --output-dir results_psd_agg_vs_psd_nagg_corsi \
     --covariates ${=COVARS_PSD} \
     --interactions \
     --alpha 0.05
 
 echo ""
-echo "====== PSD-AGG vs HC — v5 (pcon hard-easy) ======"
+echo "====== PSD-AGG vs HC — hard-easy ======"
 $PY $SCRIPT \
     --input pcon-con_v5_allchannels.csv \
-    --output-dir results_psd_nagg_vs_hc_pcon_v5 \
+    --output-dir results_psd_nagg_vs_hc_hard_easy \
     --group-pos "PSD-AGG" \
     --group-neg "HC" \
     --covariates ${=COVARS_HC} \
@@ -59,10 +59,10 @@ $PY $SCRIPT \
     --alpha 0.05
 
 echo ""
-echo "====== PSD-AGG vs HC — v7 (pcon corsi_GLT) ======"
+echo "====== PSD-AGG vs HC — corsi ======"
 $PY $SCRIPT \
     --input pcon-con_v7_allchannels.csv \
-    --output-dir results_psd_nagg_vs_hc_pcon_v7 \
+    --output-dir results_psd_nagg_vs_hc_corsi \
     --group-pos "PSD-AGG" \
     --group-neg "HC" \
     --covariates ${=COVARS_HC} \

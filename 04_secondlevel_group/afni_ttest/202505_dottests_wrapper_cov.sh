@@ -1,4 +1,4 @@
-#!/bin/bash
+#/bin/bash
 
 # main analysis wrapper for 2024-12.
 # only hbo

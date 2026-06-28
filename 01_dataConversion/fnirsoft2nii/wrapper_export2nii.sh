@@ -12,6 +12,7 @@ for s in $subjects; do
     IN=$s
     arrIN=(${IN//// })
     prefix=${arrIN[2]} 
+    #echo "prefix: " $prefix 
     
-    ./export2nii.py -f $s -tag hbt -prefix $prefix
+    python export2nii.py -f $s -tag hbt -prefix $prefix
 done

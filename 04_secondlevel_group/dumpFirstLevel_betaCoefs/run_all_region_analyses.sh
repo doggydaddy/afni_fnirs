@@ -21,10 +21,10 @@ COVARS_PSD="sans saps wais_matrix sud dose"
 TARGETS="left_dlPFC left_mPFC right_mPFC right_dlPFC"
 LABELS=('Left dlPFC' 'Left mPFC' 'Right mPFC' 'Right dlPFC')
 
-echo "====== PSD+AGG vs HC — v5 (LRV hard-easy) — regions ======"
+echo "====== PSD+AGG vs HC — hard-easy — regions ======"
 $PY $SCRIPT \
     --input lrv-con_v5_allregions.csv \
-    --output-dir results_psd_agg_vs_hc_lrv_v5_regions \
+    --output-dir results_psd_agg_vs_hc_hard_easy_regions \
     --group-pos "PSD+AGG" \
     --group-neg "HC" \
     --covariates ${=COVARS_HC} \
@@ -35,10 +35,10 @@ $PY $SCRIPT \
     --alpha 0.05
 
 echo ""
-echo "====== PSD+AGG vs HC — v7 (LRV corsi_GLT) — regions ======"
+echo "====== PSD+AGG vs HC — corsi — regions ======"
 $PY $SCRIPT \
     --input lrv-con_v7_allregions.csv \
-    --output-dir results_psd_agg_vs_hc_lrv_v7_regions \
+    --output-dir results_psd_agg_vs_hc_corsi_regions \
     --group-pos "PSD+AGG" \
     --group-neg "HC" \
     --covariates ${=COVARS_HC} \
@@ -49,10 +49,10 @@ $PY $SCRIPT \
     --alpha 0.05
 
 echo ""
-echo "====== PSD+AGG vs PSD-AGG — v5 (LRV hard-easy) — regions ======"
+echo "====== PSD+AGG vs PSD-AGG — hard-easy — regions ======"
 $PY $SCRIPT \
     --input lrv-pcon_v5_allregions.csv \
-    --output-dir results_psd_agg_lrv_v5_regions \
+    --output-dir results_psd_agg_vs_psd_nagg_hard_easy_regions \
     --covariates ${=COVARS_PSD} \
     --targets ${=TARGETS} \
     --target-labels "${LABELS[@]}" \
@@ -61,10 +61,10 @@ $PY $SCRIPT \
     --alpha 0.05
 
 echo ""
-echo "====== PSD+AGG vs PSD-AGG — v7 (LRV corsi_GLT) — regions ======"
+echo "====== PSD+AGG vs PSD-AGG — corsi — regions ======"
 $PY $SCRIPT \
     --input lrv-pcon_v7_allregions.csv \
-    --output-dir results_psd_agg_lrv_v7_regions \
+    --output-dir results_psd_agg_vs_psd_nagg_corsi_regions \
     --covariates ${=COVARS_PSD} \
     --targets ${=TARGETS} \
     --target-labels "${LABELS[@]}" \
@@ -73,10 +73,10 @@ $PY $SCRIPT \
     --alpha 0.05
 
 echo ""
-echo "====== PSD-AGG vs HC — v5 (pcon hard-easy) — regions ======"
+echo "====== PSD-AGG vs HC — hard-easy — regions ======"
 $PY $SCRIPT \
     --input pcon-con_v5_allregions.csv \
-    --output-dir results_psd_nagg_vs_hc_pcon_v5_regions \
+    --output-dir results_psd_nagg_vs_hc_hard_easy_regions \
     --group-pos "PSD-AGG" \
     --group-neg "HC" \
     --covariates ${=COVARS_HC} \
@@ -87,10 +87,10 @@ $PY $SCRIPT \
     --alpha 0.05
 
 echo ""
-echo "====== PSD-AGG vs HC — v7 (pcon corsi_GLT) — regions ======"
+echo "====== PSD-AGG vs HC — corsi — regions ======"
 $PY $SCRIPT \
     --input pcon-con_v7_allregions.csv \
-    --output-dir results_psd_nagg_vs_hc_pcon_v7_regions \
+    --output-dir results_psd_nagg_vs_hc_corsi_regions \
     --group-pos "PSD-AGG" \
     --group-neg "HC" \
     --covariates ${=COVARS_HC} \

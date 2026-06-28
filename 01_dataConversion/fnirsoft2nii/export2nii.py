@@ -15,9 +15,9 @@ np.set_printoptions(suppress=True)
 # "static" variables
 # ------------------
 # paths to template files (.nii and .txt)
-template_nii_path = '/mnt/speyside/anette_fnirs_lrv/fnirsoft2nii/templates/biopac16ch_template.nii'
-template_txt_path = '/mnt/speyside/anette_fnirs_lrv/fnirsoft2nii/templates/biopac16ch_template.txt'
-mirrored_data_list = '/mnt/speyside/anette_fnirs_lrv/fnirsoft2nii/spc_testdata/mirror_list.txt'
+template_nii_path =  '/mnt/speyside/karim_fnirs/afni_fnirs/templates/biopac16ch_template.nii'
+template_txt_path =  '/mnt/speyside/karim_fnirs/afni_fnirs/templates/biopac16ch_template.txt'
+mirrored_data_list = '/mnt/speyside/karim_fnirs/data/mirror_list.txt'
 # TR is set here since all datasets should in theory have the same TR
 tr = 0.51
 
@@ -43,13 +43,13 @@ args = parser.parse_args()
 def find_pairs(tag):
     tags = ['hbo', 'hbr', 'hbt', 'oxy']
     if tag == 'hbo':
-        search_string = ".*hbo\.Block*"
+        search_string = ".*hbo.Block*"
     elif tag == 'hbr':
-        search_string = ".*hbr\.Block*"
+        search_string = ".*hbr.Block*"
     elif tag == 'hbt':
-        search_string = ".*hbt\.Block*"
+        search_string = ".*hbt.Block*"
     elif tag == 'oxy':
-        search_string = ".*oxy\.Block*"
+        search_string = ".*oxy.Block*"
     else:
         print("find_pairs: unknown tag specified!")
         return( [] )
@@ -237,7 +237,7 @@ for i in range(len(tag_files)):
     # -------------------------------------------
 
     # extract go-nogo part
-    export_gonogo_flag = True
+    export_gonogo_flag = False
     try:
         data_gonogo = split_data(tag_data, tag_marker, 107, 108)
     except IndexError: 
@@ -271,6 +271,7 @@ for i in range(len(tag_files)):
 
     # saving go-nogo
     if export_gonogo_flag:
+        print("saving go-no-go")
         data2nii(data_gonogo, gonogo_outfilename)
 
     # saving mem data/marker pair
@@ -278,7 +279,9 @@ for i in range(len(tag_files)):
     # i.e. timing_tool.py -fsl_timing_files <onsetdur.txt output from this script> -write_timing <outout>
     #np.savetxt(mem_marker_outfilename, marker_mem, fmt='%1.3f')
     if export_mem_flag:
+        print("saving corsi")
         marker_mem.to_csv(mem_marker_outfilename, sep=' ', index=False)
         onsetdur_mem = marker2onsetdur(marker_mem)
         onsetdur_mem.to_csv(mem_onsetdur_outfilename, sep=' ', index=False, header=False )
+        print("saving data to: " + mem_outfilename)
         data2nii(data_mem, mem_outfilename)

@@ -29,24 +29,24 @@ import pandas as pd
 # Comparison manifest — edit result_dir paths here if you move folders
 # ──────────────────────────────────────────────────────────────────────────────
 COMPARISONS = [
-    dict(label="PSD+AGG vs HC",      contrast="v5 (LRV hard-easy)",
+    dict(label="PSD+AGG vs HC",      contrast="hard-easy",
          group_pos="PSD+AGG",  group_neg="HC",      covariates="SANS, SAPS, WAIS-matrix, SUD",
-         result_dir="results_psd_agg_vs_hc_lrv_v5"),
-    dict(label="PSD+AGG vs HC",      contrast="v7 (LRV corsi_GLT)",
+         result_dir="results_psd_agg_vs_hc_hard_easy"),
+    dict(label="PSD+AGG vs HC",      contrast="corsi",
          group_pos="PSD+AGG",  group_neg="HC",      covariates="SANS, SAPS, WAIS-matrix, SUD",
-         result_dir="results_psd_agg_vs_hc_lrv_v7"),
-    dict(label="PSD+AGG vs PSD-AGG", contrast="v5 (LRV hard-easy)",
+         result_dir="results_psd_agg_vs_hc_corsi"),
+    dict(label="PSD+AGG vs PSD-AGG", contrast="hard-easy",
          group_pos="PSD+AGG",  group_neg="PSD-AGG", covariates="SANS, SAPS, WAIS-matrix, SUD, DOSE",
-         result_dir="results_psd_agg_lrv_v5"),
-    dict(label="PSD+AGG vs PSD-AGG", contrast="v7 (LRV corsi_GLT)",
+         result_dir="results_psd_agg_vs_psd_nagg_hard_easy"),
+    dict(label="PSD+AGG vs PSD-AGG", contrast="corsi",
          group_pos="PSD+AGG",  group_neg="PSD-AGG", covariates="SANS, SAPS, WAIS-matrix, SUD, DOSE",
-         result_dir="results_psd_agg_lrv_v7"),
-    dict(label="PSD-AGG vs HC",      contrast="v5 (pcon hard-easy)",
+         result_dir="results_psd_agg_vs_psd_nagg_corsi"),
+    dict(label="PSD-AGG vs HC",      contrast="hard-easy",
          group_pos="PSD-AGG",  group_neg="HC",      covariates="SANS, SAPS, WAIS-matrix, SUD",
-         result_dir="results_psd_nagg_vs_hc_pcon_v5"),
-    dict(label="PSD-AGG vs HC",      contrast="v7 (pcon corsi_GLT)",
+         result_dir="results_psd_nagg_vs_hc_hard_easy"),
+    dict(label="PSD-AGG vs HC",      contrast="corsi",
          group_pos="PSD-AGG",  group_neg="HC",      covariates="SANS, SAPS, WAIS-matrix, SUD",
-         result_dir="results_psd_nagg_vs_hc_pcon_v7"),
+         result_dir="results_psd_nagg_vs_hc_corsi"),
 ]
 
 # Mode-specific configuration. The region runner writes to result_dirs with the
@@ -70,8 +70,6 @@ def get_mode_config(mode):
         return comps_r, TARGET_LABEL_MAP_REGIONS, "report_regions"
     raise ValueError(f"unknown mode: {mode}")
 
-CSV_NAME   = "results_psd_agg_vs_psd_nagg.csv"
-INT_CSV    = "interaction_results.csv"
 ALPHA      = 0.05
 
 
@@ -84,7 +82,8 @@ def _relabel(series, label_map):
 
 
 def load(comp, base_dir, label_map):
-    path = os.path.join(base_dir, comp["result_dir"], CSV_NAME)
+    name = os.path.basename(comp["result_dir"].rstrip("/"))
+    path = os.path.join(base_dir, comp["result_dir"], f"{name}.csv")
     if not os.path.exists(path):
         return None
     df = pd.read_csv(path)
@@ -93,7 +92,8 @@ def load(comp, base_dir, label_map):
 
 
 def load_interactions(comp, base_dir, label_map):
-    path = os.path.join(base_dir, comp["result_dir"], INT_CSV)
+    name = os.path.basename(comp["result_dir"].rstrip("/"))
+    path = os.path.join(base_dir, comp["result_dir"], f"{name}_interactions.csv")
     if not os.path.exists(path):
         return None
     df = pd.read_csv(path)

@@ -1,0 +1,77 @@
+-----------
+2025-05-26:
+-----------
+
+After added missing data, redo 2nd-level analysis
+
+A. Perform group-level analysis using AFNI's 3dttest++
+
+1. call ./update_sublists.sh to update subject lists
+2. use ./filter_sublists_cov.sh to filter subjects without covars. (which doesn't seem to work properly?)
+3. 1058KP removed from analysis as it doesn't have a covars file.
+
+B. Dump the first-level beta coefficients onto CSV files for own 2nd level analysis without using AFNI 3dttests:
+
+main program:
+
+    ./dumpBetaCoefs_allChannels.sh <group1 sublist> <group1 label> <group2 sublist> <group2 label> <volume idx> <output filename>
+
+the following support programs are needed for the main program to run:
+
+    * grab_betas.sh - grabs 1st level beta coefs from 1 channel
+
+    * add_covariates.py - adds covariates in covariates file (path hard-coded in
+      the support program) to the csv
+
+    * merge_channel_dumps.py - takes temporary csv single channel dumps from the
+      output of grab_betas.sh and merge them into the final output csv
+
+The post-processing program relabel_groups.sh can be called on the final output csv to relabel the csv.
+
+-----------
+2026-02-02:
+-----------
+
+Some data did not process correctly! Find which of those were:
+
+PSD-AGG: 1008KP, 1017KP, 1058KP
+
+1008KP: Could not make data conversion, no prp_1008KP.hbo.mem.fnirs.nii!  This is
+because the corsi task markers are incomplete and hence data cutting, as well as
+timing information cannot be completed. This should have been flagged in the
+data conversion process.
+
+1017KP: Could not modulate block amplitudes because corsi.csv contains doubles
+of 1017KP
+
+It was apparently a typo, and that the second 1017KP should be 1071KP, meaning
+both subjects were not processed correctly, resulting in 1017KP (with double
+entrys) failed, and 1071KP used "default" block number as amplitudes rather than
+the corsi score as amplitudes. 
+
+This has been fixed and first level analysis has now been updated
+
+1058KP: 1-st level processed fine. Excluded due to missing covariates.
+
+PSD+AGG: 0021P, 0028P missing
+
+0021P: Marks are messed up, I cannot correct them without making wild guesses I am
+not eligible to perform. Skipping
+
+0028P: Missing Markers, see 1008KP. 
+
+
+Summary Data:
+-------------
+
+    subject folders   processed
+CON 85                85
+P-A 68                67 (66*)
+P+A 79                77
+
+*Exclude 1 P-A (1058KP) due to lack of covariates
+
+New 1st level beta coefficient dumps have been made.
+
+
+

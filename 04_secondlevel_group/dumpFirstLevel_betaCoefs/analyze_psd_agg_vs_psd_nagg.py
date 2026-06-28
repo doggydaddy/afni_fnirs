@@ -560,7 +560,8 @@ def main():
 
     # ── 6. Save CSV ───────────────────────────
     os.makedirs(args.output_dir, exist_ok=True)
-    csv_out = os.path.join(args.output_dir, "results_psd_agg_vs_psd_nagg.csv")
+    out_stem = os.path.basename(args.output_dir.rstrip("/"))
+    csv_out = os.path.join(args.output_dir, f"{out_stem}.csv")
     results.to_csv(csv_out, index=False, float_format="%.6e")
     print(f"\n[✓] Results saved → {csv_out}")
 
@@ -627,7 +628,7 @@ def main():
             }).to_string(index=False))
             print()
 
-        int_csv = os.path.join(args.output_dir, "interaction_results.csv")
+        int_csv = os.path.join(args.output_dir, f"{out_stem}_interactions.csv")
         int_df.to_csv(int_csv, index=False, float_format="%.6e")
         print(f"[✓] Interaction results saved → {int_csv}")
 
