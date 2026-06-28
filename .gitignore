@@ -1,11 +1,3 @@
-04_secondlevel_group/ttest*/
-04_secondlevel_group/results/
-04_secondlevel_group/*sublist*
-04_secondlevel_group/analysis_notes.txt
-04_secondlevel_group/brain.nii
-*Result*
-
-
 # Python virtual environments (any depth)
 .venv/
 **/.venv/
@@ -14,14 +6,4 @@
 __pycache__/
 *.pyc
 
-# AFNI trash files
-**.xmat.1D
 
-# log and swap files
-*.log
-*.swp
-*log.txt
-
-# data specific analysis and notes
-*result*
-*archive*
