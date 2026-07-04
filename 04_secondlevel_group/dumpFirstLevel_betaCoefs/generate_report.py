@@ -30,10 +30,10 @@ import pandas as pd
 # ──────────────────────────────────────────────────────────────────────────────
 COMPARISONS = [
     dict(label="PSD+AGG vs HC",      contrast="hard-easy",
-         group_pos="PSD+AGG",  group_neg="HC",      covariates="SANS, SAPS, WAIS-matrix, SUD",
+         group_pos="PSD+AGG",  group_neg="HC",      covariates="WAIS-matrix, SUD",
          result_dir="results_psd_agg_vs_hc_hard_easy"),
     dict(label="PSD+AGG vs HC",      contrast="corsi",
-         group_pos="PSD+AGG",  group_neg="HC",      covariates="SANS, SAPS, WAIS-matrix, SUD",
+         group_pos="PSD+AGG",  group_neg="HC",      covariates="WAIS-matrix, SUD",
          result_dir="results_psd_agg_vs_hc_corsi"),
     dict(label="PSD+AGG vs PSD-AGG", contrast="hard-easy",
          group_pos="PSD+AGG",  group_neg="PSD-AGG", covariates="SANS, SAPS, WAIS-matrix, SUD, DOSE",
@@ -42,10 +42,10 @@ COMPARISONS = [
          group_pos="PSD+AGG",  group_neg="PSD-AGG", covariates="SANS, SAPS, WAIS-matrix, SUD, DOSE",
          result_dir="results_psd_agg_vs_psd_nagg_corsi"),
     dict(label="PSD-AGG vs HC",      contrast="hard-easy",
-         group_pos="PSD-AGG",  group_neg="HC",      covariates="SANS, SAPS, WAIS-matrix, SUD",
+         group_pos="PSD-AGG",  group_neg="HC",      covariates="WAIS-matrix, SUD",
          result_dir="results_psd_nagg_vs_hc_hard_easy"),
     dict(label="PSD-AGG vs HC",      contrast="corsi",
-         group_pos="PSD-AGG",  group_neg="HC",      covariates="SANS, SAPS, WAIS-matrix, SUD",
+         group_pos="PSD-AGG",  group_neg="HC",      covariates="WAIS-matrix, SUD",
          result_dir="results_psd_nagg_vs_hc_corsi"),
 ]
 

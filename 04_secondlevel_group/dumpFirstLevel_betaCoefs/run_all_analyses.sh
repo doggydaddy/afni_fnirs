@@ -4,8 +4,10 @@ SCRIPT=analyze_psd_agg_vs_psd_nagg.py
 
 # Covariate sets
 #   HC comparisons drop `dose` (all HCs have dose=0 → perfect collinearity with group)
-#   PSD+AGG vs PSD-AGG keeps `dose`
-COVARS_HC="sans saps wais_matrix sud"
+#   HC comparisons also drop `sans`/`saps` (patient symptom scores are undefined/0
+#   for HC, so they are not a meaningful covariate for any HC comparison)
+#   PSD+AGG vs PSD-AGG keeps sans, saps, and dose
+COVARS_HC="wais_matrix sud"
 COVARS_PSD="sans saps wais_matrix sud dose"
 
 echo "====== PSD+AGG vs HC — hard-easy ======"
