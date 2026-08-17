@@ -1,0 +1,327 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Analysis Report 2026-08-17</title><style>
+* { box-sizing: border-box; }
+body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 1100px;
+       margin: 32px auto; padding: 0 24px; color: #2c2c2c; line-height: 1.6; }
+h1 { font-size: 1.8em; border-bottom: 3px solid #c0392b; padding-bottom: 8px; color: #1a1a2e; }
+h2 { font-size: 1.3em; margin-top: 44px; padding: 6px 14px;
+     border-left: 5px solid #c0392b; background: #fafafa; color: #16213e; }
+h3 { font-size: 1.1em; color: #0f3460; margin-top: 24px; }
+table { border-collapse: collapse; width: 100%; font-size: 13px; margin: 12px 0; }
+th { background: #16213e; color: #fff; padding: 7px 10px; text-align: left; }
+td { padding: 6px 10px; border-bottom: 1px solid #e0e0e0; vertical-align: top; }
+tr:nth-child(even) td { background: #f7f8fb; }
+code { background: #f0f0f0; padding: 1px 5px; border-radius: 3px; font-size: 0.92em; }
+pre { background: #16213e; color: #eaeaea; padding: 14px 18px; border-radius: 6px;
+      overflow-x: auto; font-size: 13px; }
+pre code { background: none; color: inherit; padding: 0; }
+hr { border: none; border-top: 1px solid #ddd; margin: 28px 0; }
+blockquote { background: #f0f5ff; border-left: 4px solid #2980b9;
+             padding: 10px 16px; margin: 12px 0; border-radius: 4px; }
+</style></head><body><h1>fNIRS Corsi Task — Analysis Report, 2026-08-17</h1>
+<p><strong>What this document is:</strong> a record of a timing-alignment bug found in the
+first-level GLM pipeline, how it was fixed, and the current end-to-end
+analysis pipeline as a result. It accompanies <code>report.md</code>/<code>report.html</code>
+in this folder, which holds the actual statistical results (12
+comparisons: 2 first-level models x 3 group pairs x 2 contrasts).</p>
+<hr />
+<h2>1. Executive summary</h2>
+<p>While setting up a new non-amplitude-modulated (na) first-level model,
+group-level comparisons came back null across the board. Chasing that led
+to a genuine bug: <strong>every subject's block-onset timing fed to
+<code>3dDeconvolve</code> was offset from where those blocks actually occurred in the
+exported fNIRS data</strong>, by an amount unique to each subject (12–232s,
+median 35.6s). This affected the <strong>entire pipeline</strong> — both the
+already-established amplitude-modulated model and the new na model — for
+every prior analysis run through it.</p>
+<p>The bug was fixed at its source (<code>01_dataConversion/fnirsoft2nii/export2nii.py</code>),
+all timing metadata was regenerated for all 457 subject-runs, and both
+first-level models were rerun end-to-end along with their group-level
+comparisons. Two unrelated pre-existing data-quality issues were also
+found and fixed along the way (malformed markers in 2 subjects; all-zero
+corsi performance scores in 5 subjects). Full sample recovered on both
+models (85 HC / 77 PSD+AGG / 67 PSD-AGG, matching raw subject-folder
+counts) — see §6 for what changed in the results.</p>
+<hr />
+<h2>2. The bug: block-onset timing offset</h2>
+<h3>2.1 How it was found</h3>
+<p>The na model (4 separate per-block regressors, <code>-polort A</code>) was showing
+apparent block-4 truncation in ~99% of subjects — <code>3dDeconvolve</code> either
+hard-failed (18 subjects, both blocks 3 and 4 entirely "missing") or, more
+insidiously, silently produced numerically unstable beta estimates from a
+single subject whose block 4 had a tiny (0.8%) sliver of apparent data
+(<code>1068KP</code>, beta = -201 on one channel, versus a normal range of
+±0.0001–0.01). Investigating that outlier — checking whether it was a
+data artifact — led to checking <code>01_dataConversion</code> at the user's request.</p>
+<h3>2.2 Root cause</h3>
+<p><code>01_dataConversion/fnirsoft2nii/export2nii.py</code>:</p>
+<ul>
+<li><code>marker2onsetdur()</code> wrote block onset times using the <strong>raw recording's
+  absolute clock</strong> (e.g. block 5 onset = 510.705s for <code>1068KP</code>, i.e.
+  510.705s after the fNIRS device started recording).</li>
+<li><code>data2nii()</code> builds each subject's exported <code>.nii</code> starting at marker
+  <strong>-5</strong> (task start) — so frame 0 of the <code>.nii</code> is <em>not</em> absolute time
+  zero. It's whatever the raw clock read when marker -5 fired (96.56s for
+  <code>1068KP</code>; ranges 12–232s across the dataset, median 35.6s).</li>
+<li>Nothing subtracted that offset anywhere downstream
+  (<code>onsetDur2afniDecon.sh</code>, <code>splitTimingIntoBlocks.sh</code>,
+  <code>remodulateBlocks.sh</code>, <code>splitTimingIntoStaticBlocks.sh</code> all just pass
+  the onset values through).</li>
+<li><code>first_level_glm.sh</code> / <code>first_level_glm_na.sh</code> call <code>3dDeconvolve</code> with
+  <code>-local_times</code>, which — per AFNI's own documentation — interprets onset
+  times as <strong>relative to the start of the analyzed run</strong> (i.e. frame 0 of
+  the <code>.nii</code>), not the raw recording's absolute clock.</li>
+</ul>
+<p>Net effect: every block, for every subject, was scheduled in the design
+matrix at a position offset from where it actually happened in the data,
+by that subject's own marker -5 time.</p>
+<h3>2.3 Proof</h3>
+<p>Recomputed, for all 439 then-completed na-model subjects, what fraction of
+each block's <em>intended</em> duration actually fell within the recording — once
+before and once after subtracting the marker -5 offset:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>before correction</th>
+<th>after correction</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>block 4 &lt;10% captured</td>
+<td>80 subjects</td>
+<td><strong>0</strong></td>
+</tr>
+<tr>
+<td>block 4 &lt;95% captured</td>
+<td>435 subjects</td>
+<td><strong>2</strong></td>
+</tr>
+<tr>
+<td>block 3 &lt;95% captured</td>
+<td>66 subjects</td>
+<td><strong>0</strong></td>
+</tr>
+</tbody>
+</table>
+<p>The "truncated block 4" finding all but disappeared once the clocks were
+aligned. Separately, correlating the (buggy) na model's beta estimates
+against the (buggy) old model's beta estimates on the same underlying data
+showed real, structured correlation at several channels (e.g. na-corsi vs.
+old corsi at Ch4: r=0.40, p&lt;0.0001, n=219) — proof that <code>3dDeconvolve</code>
+itself was working correctly throughout; the two models agreed with each
+other on a real signal even while both were misaligned in absolute terms.</p>
+<hr />
+<h2>3. Secondary issues found while fixing this</h2>
+<p>None of these are timing-offset related — found incidentally while
+regenerating data end-to-end.</p>
+<h3>3.1 Malformed marker sets (data conversion)</h3>
+<p><code>marker2onsetdur()</code> assumed exactly one each of markers
+-5, 101, 102, 103, 104, 105, 106, with no validation. Two subjects have
+marker sets that don't satisfy this and previously crashed the batch
+uncaught:</p>
+<ul>
+<li><strong><code>0020P</code></strong> — a duplicate <code>101</code> marker (recording glitch). Recovered
+  automatically via a second acquisition attempt present in the subject's
+  raw files.</li>
+<li><strong><code>0028P</code></strong> — markers 104 and 105 entirely missing (task administration
+  cut short). Already flagged in <code>notes.txt</code> (2026-02-02 entry, "Missing
+  Markers"). Confirmed this subject has no <code>prp_0028P.*.mem.fnirs.nii</code> at
+  all — never converted for the corsi task, unrelated to this bug, and
+  remains excluded.</li>
+</ul>
+<p>Fixed by validating the marker set right after <code>trim_marker()</code> and
+skipping (not crashing) any subject whose markers don't match, with a
+clear log message naming what's missing/unexpected.</p>
+<h3>3.2 All-zero corsi.csv rows (amplitude-modulated model only)</h3>
+<p>Regenerating the amplitude-modulated model's <code>model.b2-3.1D</code>/<code>model.b4-5.1D</code>
+surfaced 5 subjects (<code>0053P</code>, <code>1013KP</code>, <code>1023KP</code>, <code>1052KP</code>, <code>1072KP</code>) with a
+literal all-zero row in <code>data_aux/corsi.csv</code> (<code>Block_2</code> through
+<code>Click_tot</code> all 0). Amplitude-modulating a block by a literal 0 zeroes
+that event out of the regressor entirely; with every block zeroed,
+<code>3dDeconvolve</code> reported <code>Signal-only matrix condition: UNDEFINED ** VERY
+BAD **</code> for all 10 runs (5 subjects x hbo/hbr). <code>-GOFORIT 6</code> let these
+through silently — this would not have been caught without inspecting
+individual subjects' matrix-condition warnings.</p>
+<p>Per instruction: when a block's corsi.csv score is exactly 0,
+<code>remodulateBlocks.sh</code> now falls back to a static amplitude of 1 for that
+block (distinct from its existing "subject not found in csv" fallback,
+which still uses block-number amplitude, left unchanged).</p>
+<h3>3.3 <code>-polort 6</code> → <code>-polort A</code></h3>
+<p>Unrelated to the above, raised separately: <code>-polort 6</code> was a fixed
+detrending order regardless of each subject's actual run length. AFNI's
+own guidance (<code>-polort A</code>, <code>pnum = 1 + int(D/150)</code>) auto-selects per run
+duration. At these run lengths (~500-660s), fixed polort 6 set the
+drift-removal cutoff at ~140-165s of period — close enough to individual
+block durations (up to ~130s) to risk eating into the task response; <code>A</code>
+roughly doubles that cutoff. Applied to both first-level models.</p>
+<h3>3.4 Hardcoded <code>/mnt/speyside</code> paths</h3>
+<p>Several scripts hardcoded absolute paths to a <code>/mnt/speyside</code> mount that
+doesn't exist on this machine (this dataset is mirrored across
+<code>/mnt/highlands</code>, <code>/mnt/bellevue</code>, and <code>/mnt/speyside</code>, apparently
+different machines' views of the same underlying storage).  Fixed in
+<code>export2nii.py</code> (template/mirror-list paths, now resolved relative to the
+script's own location) and in both <code>dumpBetaCoefs_allChannels.sh</code> scripts
+(template mask path, now relative; covariate file, see below).</p>
+<h3>3.5 Stale covariate file</h3>
+<p>The canonical <code>data_aux/select.cov.1D</code> on this mount is dated 2024-12-21
+and only has columns <code>X sans saps dose</code> — it predates <code>wais_matrix</code>/<code>sud</code>
+being merged in by <code>prep_select_cov.py</code> (from <code>covars.1D</code> and the Mindata
+xlsx), which a later analysis run (<code>analysis_2026-07-04</code>) clearly had
+access to on whichever machine produced it. Rather than overwrite the
+shared canonical file from this session, built local copies
+(<code>select.cov.na.1D</code>, <code>select.cov.local.1D</code>) via a portable-path variant of
+the same merge logic (<code>prep_select_cov_na.py</code>, <code>prep_select_cov_local.py</code>).</p>
+<hr />
+<h2>4. Files changed</h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Change</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>01_dataConversion/fnirsoft2nii/export2nii.py</code></td>
+<td>Fixed timing offset (<code>marker2onsetdur</code>); added <code>-skip_nii</code> flag; added marker-set validation; fixed hardcoded paths</td>
+</tr>
+<tr>
+<td><code>01_dataConversion/fnirsoft2nii/README.md</code></td>
+<td>Documented <code>-skip_nii</code> and the timing-offset fix</td>
+</tr>
+<tr>
+<td><code>03_firstlevel_glm/first_level_glm.sh</code></td>
+<td><code>-polort 6</code> → <code>-polort A</code></td>
+</tr>
+<tr>
+<td><code>03_firstlevel_glm/first_level_glm_na.sh</code></td>
+<td>New (na model GLM); <code>-polort A</code></td>
+</tr>
+<tr>
+<td><code>03_firstlevel_glm/first_level_glm_na_wrapper.sh</code></td>
+<td>New (na model batch wrapper)</td>
+</tr>
+<tr>
+<td><code>03_firstlevel_glm/splitTimingIntoStaticBlocks.sh</code></td>
+<td>New (na model block prep); duration-clipping safety net (now rarely triggers post-fix)</td>
+</tr>
+<tr>
+<td><code>03_firstlevel_glm/remodulateBlocks.sh</code></td>
+<td>Zero-score fallback to amplitude 1 (§3.2)</td>
+</tr>
+<tr>
+<td><code>03_firstlevel_glm/README.md</code></td>
+<td>Documented na model scripts</td>
+</tr>
+<tr>
+<td><code>04_secondlevel_group/dumpFirstLevel_betaCoefs/dumpBetaCoefs_allChannels.sh</code></td>
+<td>Fixed hardcoded paths</td>
+</tr>
+<tr>
+<td><code>04_secondlevel_group/dumpFirstLevel_betaCoefs/add_covariates.py</code></td>
+<td>pandas 3.0 compatibility (<code>delim_whitespace</code> removed)</td>
+</tr>
+<tr>
+<td><code>04_secondlevel_group/dumpFirstLevel_betaCoefs/prep_select_cov_local.py</code></td>
+<td>New (local covariate file builder)</td>
+</tr>
+<tr>
+<td><code>04_secondlevel_group/dumpFirstLevel_betaCoefs/run_all_analyses_2026-08-17.sh</code></td>
+<td>New (this run's group-analysis driver, sans/saps excluded)</td>
+</tr>
+<tr>
+<td><code>04p5_secondlevel_group_na/</code></td>
+<td>New (entire na model group-analysis setup — sublists, beta dumps, group comparisons)</td>
+</tr>
+<tr>
+<td><code>analysis_2026-08-17/generate_combined_report.py</code></td>
+<td>New (this report's generator)</td>
+</tr>
+<tr>
+<td><code>notes.txt</code></td>
+<td>Full narrative log, dated entries</td>
+</tr>
+</tbody>
+</table>
+<p>Pre-fix timing metadata (<code>onsetdur.txt</code>, <code>timing.txt</code>, <code>timing.1D</code>) for all
+subjects backed up to
+<code>data_aux/backup_pre_offset_fix_2026-08-17/timing_metadata_backup.tar.gz</code>
+before any regeneration.</p>
+<hr />
+<h2>5. Current end-to-end pipeline</h2>
+<p>Steps to reproduce either model's results from scratch, in order:</p>
+<h3>5.1 Data conversion (only needed once, already done)</h3>
+<pre><code>cd 01_dataConversion/fnirsoft2nii
+python3 export2nii.py -foldername &lt;subject dir&gt; -tag hbo -prefix &lt;subj&gt; [-skip_nii]
+</code></pre>
+<p>(<code>-skip_nii</code> regenerates only timing metadata — use this for any future
+timing-logic fix; omit it for a genuinely new subject's first conversion.)</p>
+<h3>5.2 First-level GLM — amplitude-modulated model</h3>
+<pre><code>cd 03_firstlevel_glm
+./onsetDur2afniDecon.sh &lt;data dir&gt;                        # onsetdur.txt -&gt; timing.1D
+./remodulateBlocks.sh &lt;data dir&gt; &lt;data_aux&gt;/corsi.csv      # timing.1D -&gt; model.b2-3/b4-5.1D
+./first_level_glm_wrapper.sh &lt;data dir&gt; &lt;mask&gt;             # -&gt; stats.&lt;subj&gt;.&lt;type&gt;.mem.nii.gz
+</code></pre>
+<h3>5.3 First-level GLM — na model</h3>
+<pre><code>cd 03_firstlevel_glm
+./onsetDur2afniDecon.sh &lt;data dir&gt;                         # (shared with 5.2, if not already run)
+./splitTimingIntoStaticBlocks.sh &lt;data dir&gt;                # timing.1D -&gt; na.block1-4.1D
+./first_level_glm_na_wrapper.sh &lt;data dir&gt; &lt;mask&gt;          # -&gt; stats.&lt;subj&gt;.&lt;type&gt;.mem.na.nii.gz
+</code></pre>
+<h3>5.4 Group-level: amplitude-modulated model</h3>
+<pre><code>cd 04_secondlevel_group/fix_sublists
+./update_sublists.sh                                       # (or build directly with find, excluding *.na.nii.gz)
+cd ../dumpFirstLevel_betaCoefs
+./dumpBetaCoefs_allChannels.sh &lt;group1 sublist&gt; &lt;label1&gt; &lt;group2 sublist&gt; &lt;label2&gt; &lt;vol idx&gt; &lt;out.csv&gt;
+  # vol idx 5 = hard-easy_GLT_Coef, 7 = corsi_GLT_Coef
+./run_all_analyses_2026-08-17.sh                            # 6 comparisons, sans/saps excluded
+</code></pre>
+<h3>5.5 Group-level: na model</h3>
+<pre><code>cd 04p5_secondlevel_group_na
+./update_sublists_na.sh
+cd dumpFirstLevel_betaCoefs
+./dumpBetaCoefs_allChannels.sh &lt;group1 sublist&gt; &lt;label1&gt; &lt;group2 sublist&gt; &lt;label2&gt; &lt;vol idx&gt; &lt;out.csv&gt;
+  # vol idx 9 = na-hard-easy_GLT_Coef, 11 = na-corsi_GLT_Coef
+./run_all_analyses_na.sh                                    # 6 comparisons, sans/saps excluded
+</code></pre>
+<h3>5.6 Combined report (this document's companion)</h3>
+<pre><code>cd analysis_2026-08-17
+python3 generate_combined_report.py                         # -&gt; report.md, report.html
+</code></pre>
+<hr />
+<h2>6. Impact on results</h2>
+<p>Both models now use correctly time-aligned data. Full sample recovered on
+both (85 HC / 77 PSD+AGG / 67 PSD-AGG on hbo, matching raw subject-folder
+counts — vs. 82/74/64 mid-debugging before the offset fix was found).</p>
+<p><strong>na model</strong> (see <code>report.md</code> §2, 6, 9, 11): PSD+AGG vs HC shows 3
+significant clusters on hard-easy (Ch3, Ch6-7, Ch9-16); PSD-AGG vs HC
+shows a significant cluster on hard-easy (Ch9-12); PSD+AGG vs PSD-AGG
+shows a wide group x covariate interaction effect on corsi.</p>
+<p><strong>Amplitude-modulated model</strong> (see <code>report.md</code> §1, 3, 5, 7): much
+narrower — only PSD+AGG vs PSD-AGG on corsi shows a significant cluster
+(Ch15-16).</p>
+<p>Both models are now correctly time-aligned, so this difference reflects
+the two models' different sensitivity/power (na's 4 separate
+static-amplitude regressors vs. this model's 2 merged, corsi-score
+amplitude-modulated regressors), not one being right and the other wrong.
+Not yet reconciled or further interpreted — see <code>report.md</code> for full
+per-channel tables.</p>
+<p>Prior to this fix, both models' group comparisons were <strong>null across all
+6 comparisons</strong> — the timing bug was actively suppressing a real signal,
+not just adding noise.</p>
+<hr />
+<h2>7. Caveats / not yet done</h2>
+<ul>
+<li>Prior group-level analyses under <code>04_secondlevel_group/dumpFirstLevel_
+  betaCoefs/analysis_2026-06-26</code>, <code>2026-06-27</code>, <code>2026-07-04</code> were built on
+  the same misaligned timing and should be treated as superseded by this
+  report, not as independent confirmation of anything.</li>
+<li><code>gonogo</code> task data was not touched by this investigation — same
+  <code>export2nii.py</code> machinery is used for it, and the same class of offset
+  bug plausibly applies there too, but it hasn't been checked.</li>
+<li>The two models' differing results (§6) haven't been reconciled or
+  interpreted beyond noting the discrepancy.</li>
+<li>Region-pooled analyses (<code>*_regions</code> variants elsewhere in the repo)
+  were not rerun as part of this fix.</li>
+</ul></body></html>

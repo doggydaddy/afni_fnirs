@@ -1,0 +1,769 @@
+====== PSD+AGG vs HC — hard-easy ======
+
+============================================================
+  PSD+AGG vs HC  |  fNIRS beta-coefficient analysis
+============================================================
+  Input : lrv-con_v5_allchannels.csv
+  Groups: PSD+AGG (n=77)  vs  HC (n=85)
+  Covariates : wais_matrix, sud
+  Targets    : 16  (Ch1, Ch2, Ch3, Ch4, Ch5, Ch6, Ch7, Ch8, Ch9, Ch10, Ch11, Ch12, Ch13, Ch14, Ch15, Ch16)
+  Alpha (FDR): 0.05
+============================================================
+
+── Descriptive statistics (covariates) ──
+        wais_matrix         sud      
+               mean   std  mean   std
+group                                
+HC            11.91  2.92  0.06  0.24
+PSD+AGG        7.69  3.27  0.73  0.45
+
+
+── Permutation tests  (5,000 perms, n=162 complete cases) ──
+  No clusters above |t|=1.975 threshold.
+
+── Per-channel results (ANCOVA — all corrections) ──
+  channel  n_pos  n_neg       beta  p_raw  p_FDR sig_FDR p_Hoch sig_Hoch p_Homm sig_Homm p_Pmax sig_Pmax p_Clust sig_Clust cohens_d
+ channel1     77     85 -1.298e-05 0.3483 0.9663     --- 0.9663      --- 0.9663      --- 0.9790      ---  1.0000       ---   -0.277
+ channel2     77     85 -1.032e-05 0.4530 0.9663     --- 0.9663      --- 0.9663      --- 0.9978      ---  1.0000       ---   -0.168
+ channel3     77     85 -1.606e-05 0.2154 0.9663     --- 0.9663      --- 0.9663      --- 0.8588      ---  1.0000       ---   -0.370
+ channel4     77     85 -1.232e-05 0.3286 0.9663     --- 0.9663      --- 0.9663      --- 0.9708      ---  1.0000       ---   -0.259
+ channel5     77     85 -3.864e-06 0.8037 0.9663     --- 0.9663      --- 0.9663      --- 1.0000      ---  1.0000       ---   -0.167
+ channel6     77     85  3.864e-06 0.7283 0.9663     --- 0.9663      --- 0.9663      --- 1.0000      ---  1.0000       ---   -0.129
+ channel7     77     85 -5.348e-06 0.6545 0.9663     --- 0.9663      --- 0.9663      --- 1.0000      ---  1.0000       ---   -0.117
+ channel8     77     85 -7.165e-06 0.5193 0.9663     --- 0.9663      --- 0.9663      --- 0.9990      ---  1.0000       ---   -0.209
+ channel9     77     85 -4.249e-06 0.6608 0.9663     --- 0.9663      --- 0.9663      --- 1.0000      ---  1.0000       ---    0.005
+channel10     77     85 -7.404e-07 0.9452 0.9663     --- 0.9663      --- 0.9663      --- 1.0000      ---  1.0000       ---   -0.121
+channel11     77     85 -7.027e-06 0.4268 0.9663     --- 0.9663      --- 0.9663      --- 0.9946      ---  1.0000       ---   -0.119
+channel12     77     85  4.139e-07 0.9663 0.9663     --- 0.9663      --- 0.9663      --- 1.0000      ---  1.0000       ---   -0.099
+channel13     77     85  1.267e-06 0.8816 0.9663     --- 0.9663      --- 0.9663      --- 1.0000      ---  1.0000       ---   -0.059
+channel14     77     85 -1.223e-05 0.2404 0.9663     --- 0.9663      --- 0.9663      --- 0.8952      ---  1.0000       ---   -0.189
+channel15     77     85 -3.921e-06 0.6840 0.9663     --- 0.9663      --- 0.9663      --- 1.0000      ---  1.0000       ---   -0.137
+channel16     77     85 -5.978e-06 0.5543 0.9663     --- 0.9663      --- 0.9663      --- 0.9994      ---  1.0000       ---   -0.042
+
+── Per-channel results (Mann-Whitney — all three corrections) ──
+  channel  p_raw p_FDR-BH sig_FDR p_Hochberg sig_Hoch p_Hommel sig_Homm  rb_r
+ channel1 0.3416   0.6564     ---     0.8906      ---   0.8906      --- 0.087
+ channel2 0.8906   0.8906     ---     0.8906      ---   0.8906      --- 0.013
+ channel3 0.1085   0.6564     ---     0.8906      ---   0.8696      --- 0.146
+ channel4 0.1924   0.6564     ---     0.8906      ---   0.8906      --- 0.119
+ channel5 0.2671   0.6564     ---     0.8906      ---   0.8906      --- 0.101
+ channel6 0.2443   0.6564     ---     0.8906      ---   0.8906      --- 0.106
+ channel7 0.4128   0.6564     ---     0.8906      ---   0.8906      --- 0.075
+ channel8 0.0986   0.6564     ---     0.8906      ---   0.8696      --- 0.150
+ channel9 0.7284   0.8245     ---     0.8906      ---   0.8906      --- 0.032
+channel10 0.3969   0.6564     ---     0.8906      ---   0.8906      --- 0.077
+channel11 0.3685   0.6564     ---     0.8906      ---   0.8906      --- 0.082
+channel12 0.4513   0.6564     ---     0.8906      ---   0.8906      --- 0.069
+channel13 0.5926   0.7293     ---     0.8906      ---   0.8906      --- 0.049
+channel14 0.3493   0.6564     ---     0.8906      ---   0.8906      --- 0.085
+channel15 0.5032   0.6710     ---     0.8906      ---   0.8906      --- 0.061
+channel16 0.7730   0.8245     ---     0.8906      ---   0.8906      --- 0.026
+
+[✓] Results saved → results_psd_agg_vs_hc_hard_easy/results_psd_agg_vs_hc_hard_easy.csv
+[✓] Figures saved → results_psd_agg_vs_hc_hard_easy/figures/
+
+── Interaction analysis: PSD+AGG vs HC ──
+   Model : channel ~ C(group) × (wais_matrix + sud)
+   FDR-BH correction across 16 targets per interaction term
+
+  group × WAIS_MATRIX  
+  channel       beta     t  p_raw  p_FDR sig
+ channel1  1.824e-06  0.61 0.5431 0.9627 ---
+ channel2  1.033e-06  0.35 0.7290 0.9627 ---
+ channel3  3.371e-07  0.12 0.9045 0.9627 ---
+ channel4 -1.281e-07 -0.05 0.9627 0.9627 ---
+ channel5  2.877e-06  0.86 0.3934 0.9627 ---
+ channel6 -1.124e-06 -0.47 0.6420 0.9627 ---
+ channel7 -1.149e-06 -0.44 0.6582 0.9627 ---
+ channel8 -2.729e-07 -0.11 0.9097 0.9627 ---
+ channel9 -5.371e-07 -0.26 0.7987 0.9627 ---
+channel10  1.866e-06  0.80 0.4253 0.9627 ---
+channel11  1.753e-07  0.09 0.9273 0.9627 ---
+channel12  3.427e-07  0.16 0.8720 0.9627 ---
+channel13 -2.755e-06 -1.50 0.1347 0.9627 ---
+channel14 -1.849e-06 -0.82 0.4133 0.9627 ---
+channel15 -1.557e-06 -0.75 0.4560 0.9627 ---
+channel16 -6.658e-07 -0.30 0.7619 0.9627 ---
+
+  group × SUD  
+  channel       beta     t  p_raw  p_FDR sig
+ channel1  2.803e-05  0.91 0.3652 0.9751 ---
+ channel2  2.860e-05  0.93 0.3530 0.9751 ---
+ channel3  2.045e-05  0.71 0.4808 0.9751 ---
+ channel4  9.481e-06  0.34 0.7373 0.9751 ---
+ channel5  2.875e-05  0.83 0.4085 0.9751 ---
+ channel6 -8.015e-06 -0.32 0.7480 0.9751 ---
+ channel7  7.979e-06  0.30 0.7658 0.9751 ---
+ channel8  2.945e-05  1.19 0.2365 0.9751 ---
+ channel9 -3.179e-06 -0.15 0.8837 0.9751 ---
+channel10 -9.155e-07 -0.04 0.9697 0.9751 ---
+channel11  1.244e-06  0.06 0.9500 0.9751 ---
+channel12 -2.148e-05 -0.98 0.3284 0.9751 ---
+channel13  1.075e-05  0.57 0.5705 0.9751 ---
+channel14 -7.265e-07 -0.03 0.9751 0.9751 ---
+channel15  1.583e-05  0.74 0.4625 0.9751 ---
+channel16  8.647e-06  0.38 0.7029 0.9751 ---
+
+[✓] Interaction results saved → results_psd_agg_vs_hc_hard_easy/results_psd_agg_vs_hc_hard_easy_interactions.csv
+
+
+====== PSD+AGG vs HC — corsi ======
+
+============================================================
+  PSD+AGG vs HC  |  fNIRS beta-coefficient analysis
+============================================================
+  Input : lrv-con_v7_allchannels.csv
+  Groups: PSD+AGG (n=77)  vs  HC (n=85)
+  Covariates : wais_matrix, sud
+  Targets    : 16  (Ch1, Ch2, Ch3, Ch4, Ch5, Ch6, Ch7, Ch8, Ch9, Ch10, Ch11, Ch12, Ch13, Ch14, Ch15, Ch16)
+  Alpha (FDR): 0.05
+============================================================
+
+── Descriptive statistics (covariates) ──
+        wais_matrix         sud      
+               mean   std  mean   std
+group                                
+HC            11.91  2.92  0.06  0.24
+PSD+AGG        7.69  3.27  0.73  0.45
+
+
+── Permutation tests  (5,000 perms, n=162 complete cases) ──
+  No clusters above |t|=1.975 threshold.
+
+── Per-channel results (ANCOVA — all corrections) ──
+  channel  n_pos  n_neg       beta  p_raw  p_FDR sig_FDR p_Hoch sig_Hoch p_Homm sig_Homm p_Pmax sig_Pmax p_Clust sig_Clust cohens_d
+ channel1     77     85 -2.080e-06 0.8107 0.8647     --- 0.9431      --- 0.9431      --- 1.0000      ---  1.0000       ---   -0.131
+ channel2     77     85 -7.930e-06 0.3627 0.8647     --- 0.9431      --- 0.9431      --- 0.9844      ---  1.0000       ---   -0.196
+ channel3     77     85 -8.143e-06 0.4027 0.8647     --- 0.9431      --- 0.9431      --- 0.9910      ---  1.0000       ---   -0.278
+ channel4     77     85 -2.793e-06 0.7339 0.8647     --- 0.9431      --- 0.9431      --- 1.0000      ---  1.0000       ---   -0.126
+ channel5     77     85 -1.199e-05 0.2060 0.8647     --- 0.9431      --- 0.9431      --- 0.8638      ---  1.0000       ---   -0.222
+ channel6     77     85 -5.555e-07 0.9431 0.9431     --- 0.9431      --- 0.9431      --- 1.0000      ---  1.0000       ---   -0.240
+ channel7     77     85 -1.055e-05 0.1784 0.8647     --- 0.9431      --- 0.9431      --- 0.8142      ---  1.0000       ---   -0.191
+ channel8     77     85 -8.376e-06 0.2677 0.8647     --- 0.9431      --- 0.9431      --- 0.9350      ---  1.0000       ---   -0.214
+ channel9     77     85 -6.782e-06 0.3616 0.8647     --- 0.9431      --- 0.9431      --- 0.9840      ---  1.0000       ---   -0.140
+channel10     77     85 -4.292e-06 0.5172 0.8647     --- 0.9431      --- 0.9431      --- 0.9996      ---  1.0000       ---   -0.266
+channel11     77     85 -7.278e-06 0.3082 0.8647     --- 0.9431      --- 0.9431      --- 0.9588      ---  1.0000       ---   -0.208
+channel12     77     85  2.180e-06 0.7466 0.8647     --- 0.9431      --- 0.9431      --- 1.0000      ---  1.0000       ---   -0.106
+channel13     77     85 -3.640e-06 0.6073 0.8647     --- 0.9431      --- 0.9431      --- 0.9998      ---  1.0000       ---   -0.097
+channel14     77     85  4.841e-06 0.4908 0.8647     --- 0.9431      --- 0.9431      --- 0.9982      ---  1.0000       ---    0.046
+channel15     77     85 -1.756e-06 0.7990 0.8647     --- 0.9431      --- 0.9431      --- 1.0000      ---  1.0000       ---   -0.083
+channel16     77     85 -1.889e-06 0.7675 0.8647     --- 0.9431      --- 0.9431      --- 1.0000      ---  1.0000       ---    0.048
+
+── Per-channel results (Mann-Whitney — all three corrections) ──
+  channel  p_raw p_FDR-BH sig_FDR p_Hochberg sig_Hoch p_Hommel sig_Homm   rb_r
+ channel1 0.6386   0.9261     ---     0.9960      ---   0.9960      ---  0.043
+ channel2 0.4956   0.9261     ---     0.9960      ---   0.9960      ---  0.062
+ channel3 0.2377   0.7145     ---     0.9960      ---   0.9960      ---  0.108
+ channel4 0.7486   0.9261     ---     0.9960      ---   0.9960      ---  0.029
+ channel5 0.2679   0.7145     ---     0.9960      ---   0.9960      ---  0.101
+ channel6 0.0375   0.3949     ---     0.5994      ---   0.5620      ---  0.190
+ channel7 0.1956   0.7145     ---     0.9960      ---   0.9960      ---  0.118
+ channel8 0.0494   0.3949     ---     0.7404      ---   0.6910      ---  0.179
+ channel9 0.6687   0.9261     ---     0.9960      ---   0.9960      ---  0.039
+channel10 0.0840   0.4478     ---     0.9960      ---   0.9850      ---  0.158
+channel11 0.5325   0.9261     ---     0.9960      ---   0.9960      ---  0.057
+channel12 0.6278   0.9261     ---     0.9960      ---   0.9960      ---  0.044
+channel13 0.9960   0.9960     ---     0.9960      ---   0.9960      --- -0.001
+channel14 0.8209   0.9381     ---     0.9960      ---   0.9960      --- -0.021
+channel15 0.7525   0.9261     ---     0.9960      ---   0.9960      ---  0.029
+channel16 0.9839   0.9960     ---     0.9960      ---   0.9960      ---  0.002
+
+[✓] Results saved → results_psd_agg_vs_hc_corsi/results_psd_agg_vs_hc_corsi.csv
+[✓] Figures saved → results_psd_agg_vs_hc_corsi/figures/
+
+── Interaction analysis: PSD+AGG vs HC ──
+   Model : channel ~ C(group) × (wais_matrix + sud)
+   FDR-BH correction across 16 targets per interaction term
+
+  group × WAIS_MATRIX  
+  channel       beta     t  p_raw  p_FDR sig
+ channel1 -1.229e-06 -0.66 0.5134 0.7834 ---
+ channel2  1.272e-06  0.68 0.5005 0.7834 ---
+ channel3 -3.109e-06 -1.48 0.1398 0.7834 ---
+ channel4 -1.741e-06 -0.98 0.3292 0.7834 ---
+ channel5  1.239e-06  0.61 0.5458 0.7834 ---
+ channel6 -1.071e-06 -0.64 0.5261 0.7834 ---
+ channel7  4.217e-07  0.25 0.8038 0.8891 ---
+ channel8 -4.848e-08 -0.03 0.9764 0.9764 ---
+ channel9 -1.024e-06 -0.64 0.5259 0.7834 ---
+channel10 -7.811e-07 -0.54 0.5867 0.7834 ---
+channel11  1.021e-06  0.66 0.5102 0.7834 ---
+channel12 -8.157e-07 -0.56 0.5767 0.7834 ---
+channel13 -1.869e-06 -1.22 0.2235 0.7834 ---
+channel14  8.280e-07  0.54 0.5876 0.7834 ---
+channel15  6.208e-07  0.42 0.6776 0.8339 ---
+channel16 -2.914e-07 -0.21 0.8336 0.8891 ---
+
+  group × SUD  
+  channel       beta     t  p_raw  p_FDR sig
+ channel1  2.093e-05  1.08 0.2811 0.8229 ---
+ channel2  1.608e-05  0.83 0.4093 0.8229 ---
+ channel3  8.883e-06  0.41 0.6816 0.9177 ---
+ channel4  3.232e-06  0.18 0.8604 0.9177 ---
+ channel5  1.990e-05  0.94 0.3474 0.8229 ---
+ channel6 -1.243e-05 -0.72 0.4756 0.8454 ---
+ channel7  1.461e-05  0.84 0.4048 0.8229 ---
+ channel8 -4.149e-06 -0.25 0.8064 0.9177 ---
+ channel9  4.073e-06  0.25 0.8066 0.9177 ---
+channel10 -1.390e-05 -0.94 0.3489 0.8229 ---
+channel11  4.091e-06  0.26 0.7980 0.9177 ---
+channel12 -1.776e-05 -1.18 0.2395 0.8229 ---
+channel13  5.055e-06  0.32 0.7491 0.9177 ---
+channel14  7.080e-07  0.05 0.9641 0.9641 ---
+channel15  1.790e-05  1.16 0.2462 0.8229 ---
+channel16  1.176e-05  0.82 0.4114 0.8229 ---
+
+[✓] Interaction results saved → results_psd_agg_vs_hc_corsi/results_psd_agg_vs_hc_corsi_interactions.csv
+
+
+====== PSD+AGG vs PSD-AGG — hard-easy ======
+
+============================================================
+  PSD+AGG vs PSD-AGG  |  fNIRS beta-coefficient analysis
+============================================================
+  Input : lrv-pcon_v5_allchannels.csv
+  Groups: PSD+AGG (n=77)  vs  PSD-AGG (n=66)
+  Covariates : sans, saps, wais_matrix, sud, dose
+  Targets    : 16  (Ch1, Ch2, Ch3, Ch4, Ch5, Ch6, Ch7, Ch8, Ch9, Ch10, Ch11, Ch12, Ch13, Ch14, Ch15, Ch16)
+  Alpha (FDR): 0.05
+============================================================
+
+── Descriptive statistics (covariates) ──
+          sans         saps        wais_matrix         sud         dose       
+          mean    std  mean    std        mean   std  mean   std   mean    std
+group                                                                         
+PSD+AGG  24.03  12.26  7.70  10.30        7.69  3.27  0.73  0.45  13.88  11.54
+PSD-AGG  20.23  12.83  9.91  13.44        9.41  4.12  0.29  0.46   8.36   8.19
+
+
+── Permutation tests  (5,000 perms, n=143 complete cases) ──
+  No clusters above |t|=1.978 threshold.
+
+── Per-channel results (ANCOVA — all corrections) ──
+  channel  n_pos  n_neg       beta  p_raw  p_FDR sig_FDR p_Hoch sig_Hoch p_Homm sig_Homm p_Pmax sig_Pmax p_Clust sig_Clust cohens_d
+ channel1     77     66 -1.660e-05 0.1756 0.9628     --- 0.9628      --- 0.9628      --- 0.8272      ---  1.0000       ---   -0.159
+ channel2     77     66 -8.561e-06 0.4868 0.9628     --- 0.9628      --- 0.9628      --- 0.9990      ---  1.0000       ---   -0.008
+ channel3     77     66 -1.843e-05 0.1475 0.9628     --- 0.9628      --- 0.9628      --- 0.7586      ---  1.0000       ---   -0.188
+ channel4     77     66 -1.096e-05 0.3516 0.9628     --- 0.9628      --- 0.9628      --- 0.9860      ---  1.0000       ---   -0.076
+ channel5     77     66 -5.490e-06 0.6834 0.9628     --- 0.9628      --- 0.9628      --- 1.0000      ---  1.0000       ---   -0.092
+ channel6     77     66 -1.825e-06 0.8486 0.9628     --- 0.9628      --- 0.9628      --- 1.0000      ---  1.0000       ---   -0.122
+ channel7     77     66  9.085e-07 0.9325 0.9628     --- 0.9628      --- 0.9628      --- 1.0000      ---  1.0000       ---   -0.002
+ channel8     77     66 -2.343e-06 0.8077 0.9628     --- 0.9628      --- 0.9628      --- 1.0000      ---  1.0000       ---   -0.037
+ channel9     77     66  3.558e-06 0.6796 0.9628     --- 0.9628      --- 0.9628      --- 1.0000      ---  1.0000       ---    0.039
+channel10     77     66  1.722e-06 0.8742 0.9628     --- 0.9628      --- 0.9628      --- 1.0000      ---  1.0000       ---    0.070
+channel11     77     66 -2.046e-06 0.8092 0.9628     --- 0.9628      --- 0.9628      --- 1.0000      ---  1.0000       ---    0.018
+channel12     77     66  5.450e-06 0.6438 0.9628     --- 0.9628      --- 0.9628      --- 1.0000      ---  1.0000       ---    0.063
+channel13     77     66  4.017e-06 0.6253 0.9628     --- 0.9628      --- 0.9628      --- 1.0000      ---  1.0000       ---    0.124
+channel14     77     66 -1.681e-06 0.8748 0.9628     --- 0.9628      --- 0.9628      --- 1.0000      ---  1.0000       ---    0.009
+channel15     77     66  4.488e-07 0.9628 0.9628     --- 0.9628      --- 0.9628      --- 1.0000      ---  1.0000       ---   -0.010
+channel16     77     66 -1.355e-06 0.8968 0.9628     --- 0.9628      --- 0.9628      --- 1.0000      ---  1.0000       ---    0.037
+
+── Per-channel results (Mann-Whitney — all three corrections) ──
+  channel  p_raw p_FDR-BH sig_FDR p_Hochberg sig_Hoch p_Hommel sig_Homm   rb_r
+ channel1 0.9709   0.9709     ---     0.9709      ---   0.9709      --- -0.004
+ channel2 0.7953   0.9709     ---     0.9709      ---   0.9709      --- -0.025
+ channel3 0.4329   0.9709     ---     0.9709      ---   0.9709      ---  0.076
+ channel4 0.5391   0.9709     ---     0.9709      ---   0.9709      ---  0.060
+ channel5 0.4883   0.9709     ---     0.9709      ---   0.9709      ---  0.067
+ channel6 0.1727   0.9709     ---     0.9709      ---   0.9709      ---  0.132
+ channel7 0.9514   0.9709     ---     0.9709      ---   0.9709      --- -0.006
+ channel8 0.3852   0.9709     ---     0.9709      ---   0.9709      ---  0.084
+ channel9 0.6452   0.9709     ---     0.9709      ---   0.9709      ---  0.045
+channel10 0.8871   0.9709     ---     0.9709      ---   0.9709      ---  0.014
+channel11 0.8110   0.9709     ---     0.9709      ---   0.9709      ---  0.023
+channel12 0.5703   0.9709     ---     0.9709      ---   0.9709      ---  0.055
+channel13 0.8904   0.9709     ---     0.9709      ---   0.9709      --- -0.014
+channel14 0.8776   0.9709     ---     0.9709      ---   0.9709      ---  0.015
+channel15 0.6108   0.9709     ---     0.9709      ---   0.9709      ---  0.050
+channel16 0.6368   0.9709     ---     0.9709      ---   0.9709      ---  0.046
+
+[✓] Results saved → results_psd_agg_vs_psd_nagg_hard_easy/results_psd_agg_vs_psd_nagg_hard_easy.csv
+[✓] Figures saved → results_psd_agg_vs_psd_nagg_hard_easy/figures/
+
+── Interaction analysis: PSD+AGG vs PSD-AGG ──
+   Model : channel ~ C(group) × (sans + saps + wais_matrix + sud + dose)
+   FDR-BH correction across 16 targets per interaction term
+
+  group × SANS  
+  channel       beta     t  p_raw  p_FDR sig
+ channel1  4.340e-07  0.50 0.6170 0.8226 ---
+ channel2  3.448e-07  0.38 0.7013 0.8631 ---
+ channel3  1.798e-07  0.19 0.8462 0.9026 ---
+ channel4 -8.658e-07 -1.02 0.3101 0.6517 ---
+ channel5  8.815e-07  0.91 0.3666 0.6517 ---
+ channel6 -6.738e-07 -0.98 0.3277 0.6517 ---
+ channel7 -1.892e-07 -0.24 0.8088 0.9026 ---
+ channel8 -8.177e-07 -1.19 0.2374 0.6517 ---
+ channel9 -6.130e-07 -0.99 0.3255 0.6517 ---
+channel10 -6.180e-08 -0.08 0.9375 0.9375 ---
+channel11 -4.017e-07 -0.65 0.5171 0.7955 ---
+channel12 -5.184e-07 -0.60 0.5469 0.7955 ---
+channel13 -9.512e-07 -1.60 0.1120 0.4481 ---
+channel14 -1.526e-06 -2.02 0.0452 0.2413 ---
+channel15 -1.958e-06 -2.91 0.0043 0.0684 ---
+channel16 -1.635e-06 -2.21 0.0288 0.2301 ---
+
+  group × SAPS  
+  channel       beta     t  p_raw  p_FDR sig
+ channel1  1.111e-06  1.15 0.2511 0.8035 ---
+ channel2  5.101e-07  0.51 0.6103 0.8891 ---
+ channel3  7.186e-08  0.07 0.9445 0.9468 ---
+ channel4  1.375e-06  1.45 0.1484 0.7916 ---
+ channel5  1.305e-06  1.21 0.2302 0.8035 ---
+ channel6  1.627e-06  2.13 0.0350 0.5594 ---
+ channel7  6.345e-07  0.73 0.4662 0.8891 ---
+ channel8  1.121e-06  1.46 0.1463 0.7916 ---
+ channel9 -5.953e-07 -0.86 0.3907 0.8891 ---
+channel10 -3.165e-07 -0.36 0.7184 0.8891 ---
+channel11 -1.945e-07 -0.28 0.7779 0.8891 ---
+channel12  3.192e-07  0.33 0.7388 0.8891 ---
+channel13  2.683e-07  0.41 0.6859 0.8891 ---
+channel14  8.364e-07  1.00 0.3214 0.8570 ---
+channel15  2.988e-07  0.40 0.6907 0.8891 ---
+channel16 -5.498e-08 -0.07 0.9468 0.9468 ---
+
+  group × WAIS_MATRIX  
+  channel       beta     t  p_raw  p_FDR sig
+ channel1  5.453e-06  1.82 0.0705 0.8315 ---
+ channel2  1.272e-06  0.41 0.6821 0.8315 ---
+ channel3  1.744e-06  0.55 0.5861 0.8315 ---
+ channel4  6.259e-07  0.21 0.8315 0.8315 ---
+ channel5  3.165e-06  0.94 0.3482 0.8315 ---
+ channel6 -6.900e-07 -0.29 0.7714 0.8315 ---
+ channel7 -7.611e-07 -0.28 0.7780 0.8315 ---
+ channel8 -8.824e-07 -0.37 0.7114 0.8315 ---
+ channel9 -1.598e-06 -0.74 0.4577 0.8315 ---
+channel10  1.275e-06  0.47 0.6400 0.8315 ---
+channel11 -1.112e-06 -0.52 0.6036 0.8315 ---
+channel12 -1.546e-06 -0.52 0.6031 0.8315 ---
+channel13 -5.259e-07 -0.26 0.7983 0.8315 ---
+channel14 -1.949e-06 -0.75 0.4562 0.8315 ---
+channel15 -6.508e-07 -0.28 0.7801 0.8315 ---
+channel16 -8.120e-07 -0.32 0.7511 0.8315 ---
+
+  group × SUD  
+  channel       beta     t  p_raw  p_FDR sig
+ channel1  4.619e-05  1.96 0.0525 0.8404 ---
+ channel2  1.818e-05  0.74 0.4587 0.9138 ---
+ channel3  1.420e-05  0.56 0.5744 0.9138 ---
+ channel4  9.944e-06  0.43 0.6686 0.9138 ---
+ channel5  1.757e-05  0.66 0.5090 0.9138 ---
+ channel6 -4.066e-06 -0.22 0.8283 0.9138 ---
+ channel7 -4.362e-06 -0.21 0.8378 0.9138 ---
+ channel8 -1.635e-05 -0.87 0.3858 0.9138 ---
+ channel9  2.709e-06  0.16 0.8732 0.9138 ---
+channel10 -3.205e-05 -1.49 0.1378 0.9138 ---
+channel11 -4.633e-06 -0.27 0.7840 0.9138 ---
+channel12 -1.929e-05 -0.82 0.4113 0.9138 ---
+channel13 -1.149e-05 -0.71 0.4799 0.9138 ---
+channel14 -8.821e-06 -0.43 0.6690 0.9138 ---
+channel15 -1.990e-06 -0.11 0.9138 0.9138 ---
+channel16 -1.151e-05 -0.57 0.5690 0.9138 ---
+
+  group × DOSE  
+  channel       beta     t  p_raw  p_FDR sig
+ channel1 -1.455e-06 -1.18 0.2401 0.6036 ---
+ channel2 -1.805e-07 -0.14 0.8879 0.9820 ---
+ channel3 -4.463e-07 -0.34 0.7353 0.9820 ---
+ channel4 -1.307e-07 -0.11 0.9141 0.9820 ---
+ channel5 -1.089e-07 -0.08 0.9375 0.9820 ---
+ channel6 -2.210e-08 -0.02 0.9820 0.9820 ---
+ channel7  1.011e-06  0.91 0.3641 0.6874 ---
+ channel8  1.318e-06  1.34 0.1816 0.5810 ---
+ channel9  1.246e-06  1.41 0.1613 0.5810 ---
+channel10  1.257e-06  1.12 0.2641 0.6036 ---
+channel11 -1.463e-07 -0.17 0.8683 0.9820 ---
+channel12  1.118e-07  0.09 0.9272 0.9820 ---
+channel13  7.354e-07  0.87 0.3867 0.6874 ---
+channel14  2.142e-06  1.99 0.0484 0.2583 ---
+channel15  2.118e-06  2.21 0.0289 0.2310 ---
+channel16  2.519e-06  2.39 0.0181 0.2310 ---
+
+[✓] Interaction results saved → results_psd_agg_vs_psd_nagg_hard_easy/results_psd_agg_vs_psd_nagg_hard_easy_interactions.csv
+
+
+====== PSD+AGG vs PSD-AGG — corsi ======
+
+============================================================
+  PSD+AGG vs PSD-AGG  |  fNIRS beta-coefficient analysis
+============================================================
+  Input : lrv-pcon_v7_allchannels.csv
+  Groups: PSD+AGG (n=77)  vs  PSD-AGG (n=66)
+  Covariates : sans, saps, wais_matrix, sud, dose
+  Targets    : 16  (Ch1, Ch2, Ch3, Ch4, Ch5, Ch6, Ch7, Ch8, Ch9, Ch10, Ch11, Ch12, Ch13, Ch14, Ch15, Ch16)
+  Alpha (FDR): 0.05
+============================================================
+
+── Descriptive statistics (covariates) ──
+          sans         saps        wais_matrix         sud         dose       
+          mean    std  mean    std        mean   std  mean   std   mean    std
+group                                                                         
+PSD+AGG  24.03  12.26  7.70  10.30        7.69  3.27  0.73  0.45  13.88  11.54
+PSD-AGG  20.23  12.83  9.91  13.44        9.41  4.12  0.29  0.46   8.36   8.19
+
+
+── Permutation tests  (5,000 perms, n=143 complete cases) ──
+  Cluster-forming |t| threshold: 1.978
+  Cluster 1: [Ch3]  mass=-2.096  p=0.3054  —
+
+── Per-channel results (ANCOVA — all corrections) ──
+  channel  n_pos  n_neg       beta  p_raw  p_FDR sig_FDR p_Hoch sig_Hoch p_Homm sig_Homm p_Pmax sig_Pmax p_Clust sig_Clust cohens_d
+ channel1     77     66 -5.017e-06 0.5306 0.8857     --- 0.9857      --- 0.9857      --- 0.9998      ---  1.0000       ---   -0.126
+ channel2     77     66 -3.150e-06 0.6641 0.9226     --- 0.9857      --- 0.9857      --- 1.0000      ---  1.0000       ---   -0.049
+ channel3     77     66 -1.905e-05 0.0379 0.6068     --- 0.6068      --- 0.6068      --- 0.3036      ---  0.3054       ---   -0.242
+ channel4     77     66 -5.371e-06 0.4649 0.8857     --- 0.9857      --- 0.9857      --- 0.9990      ---  1.0000       ---   -0.104
+ channel5     77     66 -7.784e-06 0.3225 0.8857     --- 0.9857      --- 0.9857      --- 0.9794      ---  1.0000       ---   -0.123
+ channel6     77     66 -1.896e-06 0.7747 0.9226     --- 0.9857      --- 0.9857      --- 1.0000      ---  1.0000       ---   -0.108
+ channel7     77     66 -3.926e-06 0.5536 0.8857     --- 0.9857      --- 0.9857      --- 0.9998      ---  1.0000       ---   -0.060
+ channel8     77     66 -3.585e-06 0.5531 0.8857     --- 0.9857      --- 0.9857      --- 0.9998      ---  1.0000       ---   -0.080
+ channel9     77     66  4.250e-07 0.9440 0.9857     --- 0.9857      --- 0.9857      --- 1.0000      ---  1.0000       ---   -0.047
+channel10     77     66  1.738e-06 0.7766 0.9226     --- 0.9857      --- 0.9857      --- 1.0000      ---  1.0000       ---    0.098
+channel11     77     66 -9.710e-08 0.9857 0.9857     --- 0.9857      --- 0.9857      --- 1.0000      ---  1.0000       ---    0.039
+channel12     77     66  5.271e-06 0.4345 0.8857     --- 0.9857      --- 0.9857      --- 0.9982      ---  1.0000       ---    0.093
+channel13     77     66 -6.326e-06 0.2815 0.8857     --- 0.9857      --- 0.9857      --- 0.9584      ---  1.0000       ---   -0.140
+channel14     77     66 -1.572e-06 0.8073 0.9226     --- 0.9857      --- 0.9857      --- 1.0000      ---  1.0000       ---   -0.025
+channel15     77     66 -5.483e-06 0.3071 0.8857     --- 0.9857      --- 0.9857      --- 0.9730      ---  1.0000       ---   -0.155
+channel16     77     66 -7.837e-06 0.1627 0.8857     --- 0.9857      --- 0.9857      --- 0.8042      ---  1.0000       ---   -0.151
+
+── Per-channel results (Mann-Whitney — all three corrections) ──
+  channel  p_raw p_FDR-BH sig_FDR p_Hochberg sig_Hoch p_Hommel sig_Homm   rb_r
+ channel1 0.8490   0.9628     ---     0.9628      ---   0.9628      ---  0.019
+ channel2 0.8903   0.9628     ---     0.9628      ---   0.9628      --- -0.014
+ channel3 0.4143   0.8880     ---     0.9628      ---   0.9628      ---  0.079
+ channel4 0.4995   0.8880     ---     0.9628      ---   0.9628      ---  0.066
+ channel5 0.2442   0.8880     ---     0.9628      ---   0.9628      ---  0.113
+ channel6 0.2894   0.8880     ---     0.9628      ---   0.9628      ---  0.103
+ channel7 0.3788   0.8880     ---     0.9628      ---   0.9628      ---  0.085
+ channel8 0.1925   0.8880     ---     0.9628      ---   0.9628      ---  0.127
+ channel9 0.9628   0.9628     ---     0.9628      ---   0.9628      --- -0.005
+channel10 0.9289   0.9628     ---     0.9628      ---   0.9628      --- -0.009
+channel11 0.2137   0.8880     ---     0.9628      ---   0.9628      --- -0.121
+channel12 0.7780   0.9628     ---     0.9628      ---   0.9628      --- -0.028
+channel13 0.4780   0.8880     ---     0.9628      ---   0.9628      ---  0.069
+channel14 0.6971   0.9628     ---     0.9628      ---   0.9628      ---  0.038
+channel15 0.6616   0.9628     ---     0.9628      ---   0.9628      ---  0.043
+channel16 0.2845   0.8880     ---     0.9628      ---   0.9628      ---  0.104
+
+[✓] Results saved → results_psd_agg_vs_psd_nagg_corsi/results_psd_agg_vs_psd_nagg_corsi.csv
+[✓] Figures saved → results_psd_agg_vs_psd_nagg_corsi/figures/
+
+── Interaction analysis: PSD+AGG vs PSD-AGG ──
+   Model : channel ~ C(group) × (sans + saps + wais_matrix + sud + dose)
+   FDR-BH correction across 16 targets per interaction term
+
+  group × SANS  
+  channel       beta     t  p_raw  p_FDR sig
+ channel1  1.052e-06  1.87 0.0637 0.4284 ---
+ channel2  9.207e-07  1.76 0.0803 0.4284 ---
+ channel3  1.643e-06  2.62 0.0099 0.1591 ---
+ channel4  5.078e-07  0.96 0.3373 0.5624 ---
+ channel5  6.134e-07  1.09 0.2774 0.5624 ---
+ channel6 -7.205e-08 -0.15 0.8802 0.8802 ---
+ channel7  8.677e-08  0.18 0.8568 0.8802 ---
+ channel8 -6.875e-08 -0.16 0.8745 0.8802 ---
+ channel9  4.963e-07  1.15 0.2524 0.5624 ---
+channel10  4.228e-07  0.97 0.3352 0.5624 ---
+channel11  1.090e-07  0.28 0.7834 0.8802 ---
+channel12  2.076e-07  0.42 0.6727 0.8802 ---
+channel13  6.120e-07  1.45 0.1505 0.5624 ---
+channel14  2.958e-07  0.65 0.5179 0.7533 ---
+channel15  4.416e-07  1.15 0.2532 0.5624 ---
+channel16  3.784e-07  0.93 0.3515 0.5624 ---
+
+  group × SAPS  
+  channel       beta     t  p_raw  p_FDR sig
+ channel1  7.441e-07  1.19 0.2370 0.6319 ---
+ channel2  2.167e-08  0.04 0.9703 0.9703 ---
+ channel3 -9.117e-07 -1.30 0.1945 0.6225 ---
+ channel4  8.966e-07  1.53 0.1290 0.6225 ---
+ channel5  1.164e-06  1.86 0.0652 0.5218 ---
+ channel6  7.534e-07  1.42 0.1584 0.6225 ---
+ channel7  5.212e-07  0.98 0.3309 0.6619 ---
+ channel8  5.024e-07  1.04 0.3008 0.6619 ---
+ channel9  1.627e-07  0.34 0.7355 0.8406 ---
+channel10 -1.861e-07 -0.38 0.7026 0.8406 ---
+channel11  3.090e-07  0.70 0.4842 0.7195 ---
+channel12  3.918e-07  0.72 0.4741 0.7195 ---
+channel13  3.195e-07  0.68 0.4988 0.7195 ---
+channel14  1.194e-06  2.35 0.0202 0.3225 ---
+channel15  2.634e-07  0.61 0.5396 0.7195 ---
+channel16 -2.708e-08 -0.06 0.9521 0.9703 ---
+
+  group × WAIS_MATRIX  
+  channel       beta     t  p_raw  p_FDR sig
+ channel1  8.632e-08  0.04 0.9647 0.9647 ---
+ channel2  2.117e-07  0.12 0.9068 0.9647 ---
+ channel3 -3.468e-06 -1.60 0.1125 0.8998 ---
+ channel4 -6.264e-07 -0.34 0.7315 0.9647 ---
+ channel5 -2.429e-07 -0.12 0.9007 0.9647 ---
+ channel6 -1.309e-06 -0.79 0.4286 0.9647 ---
+ channel7 -1.802e-06 -1.09 0.2792 0.9647 ---
+ channel8 -1.953e-06 -1.30 0.1956 0.9647 ---
+ channel9 -1.525e-06 -1.02 0.3086 0.9647 ---
+channel10 -8.245e-07 -0.55 0.5860 0.9647 ---
+channel11  2.629e-07  0.19 0.8478 0.9647 ---
+channel12 -4.499e-07 -0.27 0.7910 0.9647 ---
+channel13  3.595e-07  0.25 0.8061 0.9647 ---
+channel14  2.818e-06  1.79 0.0761 0.8998 ---
+channel15  6.442e-07  0.48 0.6288 0.9647 ---
+channel16  3.819e-07  0.27 0.7851 0.9647 ---
+
+  group × SUD  
+  channel       beta     t  p_raw  p_FDR sig
+ channel1  2.917e-05  1.90 0.0595 0.4762 ---
+ channel2  1.813e-05  1.27 0.2055 0.7658 ---
+ channel3  6.202e-06  0.36 0.7179 0.7658 ---
+ channel4  1.465e-05  1.02 0.3102 0.7658 ---
+ channel5  1.456e-05  0.95 0.3442 0.7658 ---
+ channel6 -5.306e-06 -0.41 0.6841 0.7658 ---
+ channel7  6.614e-06  0.51 0.6142 0.7658 ---
+ channel8 -1.383e-05 -1.17 0.2454 0.7658 ---
+ channel9  4.298e-06  0.37 0.7156 0.7658 ---
+channel10 -2.617e-05 -2.20 0.0299 0.4762 ---
+channel11  2.450e-06  0.23 0.8208 0.8208 ---
+channel12 -7.182e-06 -0.54 0.5921 0.7658 ---
+channel13  9.095e-06  0.79 0.4321 0.7658 ---
+channel14  7.205e-06  0.58 0.5636 0.7658 ---
+channel15  1.791e-05  1.71 0.0903 0.4818 ---
+channel16  7.698e-06  0.70 0.4867 0.7658 ---
+
+  group × DOSE  
+  channel       beta     t  p_raw  p_FDR sig
+ channel1 -1.962e-06 -2.45 0.0157 0.1252 ---
+ channel2 -5.333e-07 -0.72 0.4747 0.9174 ---
+ channel3 -2.421e-06 -2.71 0.0077 0.1231 ---
+ channel4 -1.097e-06 -1.46 0.1464 0.6288 ---
+ channel5 -9.342e-07 -1.17 0.2455 0.6548 ---
+ channel6 -8.962e-07 -1.32 0.1895 0.6288 ---
+ channel7 -2.504e-07 -0.37 0.7146 0.9429 ---
+ channel8  8.022e-08  0.13 0.8970 0.9568 ---
+ channel9  7.980e-07  1.30 0.1965 0.6288 ---
+channel10  3.514e-07  0.56 0.5734 0.9174 ---
+channel11 -1.416e-08 -0.03 0.9800 0.9800 ---
+channel12 -4.350e-07 -0.62 0.5344 0.9174 ---
+channel13  1.335e-07  0.22 0.8250 0.9429 ---
+channel14  1.469e-07  0.23 0.8215 0.9429 ---
+channel15  1.214e-07  0.22 0.8250 0.9429 ---
+channel16  5.876e-07  1.02 0.3097 0.7079 ---
+
+[✓] Interaction results saved → results_psd_agg_vs_psd_nagg_corsi/results_psd_agg_vs_psd_nagg_corsi_interactions.csv
+
+
+====== PSD-AGG vs HC — hard-easy ======
+
+============================================================
+  PSD-AGG vs HC  |  fNIRS beta-coefficient analysis
+============================================================
+  Input : pcon-con_v5_allchannels.csv
+  Groups: PSD-AGG (n=66)  vs  HC (n=85)
+  Covariates : wais_matrix, sud
+  Targets    : 16  (Ch1, Ch2, Ch3, Ch4, Ch5, Ch6, Ch7, Ch8, Ch9, Ch10, Ch11, Ch12, Ch13, Ch14, Ch15, Ch16)
+  Alpha (FDR): 0.05
+============================================================
+
+── Descriptive statistics (covariates) ──
+        wais_matrix         sud      
+               mean   std  mean   std
+group                                
+HC            11.91  2.92  0.06  0.24
+PSD-AGG        9.41  4.12  0.29  0.46
+
+
+── Permutation tests  (5,000 perms, n=151 complete cases) ──
+  No clusters above |t|=1.976 threshold.
+
+── Per-channel results (ANCOVA — all corrections) ──
+  channel  n_pos  n_neg       beta  p_raw  p_FDR sig_FDR p_Hoch sig_Hoch p_Homm sig_Homm p_Pmax sig_Pmax p_Clust sig_Clust cohens_d
+ channel1     66     85 -5.185e-06 0.5695 0.7706     --- 0.9666      --- 0.9666      --- 1.0000      ---  1.0000       ---   -0.125
+ channel2     66     85 -9.054e-06 0.3350 0.7706     --- 0.9666      --- 0.9666      --- 0.9688      ---  1.0000       ---   -0.179
+ channel3     66     85 -6.762e-06 0.4931 0.7706     --- 0.9666      --- 0.9666      --- 0.9992      ---  1.0000       ---   -0.148
+ channel4     66     85 -8.323e-06 0.3557 0.7706     --- 0.9666      --- 0.9666      --- 0.9776      ---  1.0000       ---   -0.183
+ channel5     66     85 -1.976e-06 0.8094 0.8634     --- 0.9666      --- 0.9666      --- 1.0000      ---  1.0000       ---   -0.102
+ channel6     66     85  3.486e-06 0.6261 0.7706     --- 0.9666      --- 0.9666      --- 1.0000      ---  1.0000       ---   -0.002
+ channel7     66     85 -4.650e-06 0.6032 0.7706     --- 0.9666      --- 0.9666      --- 1.0000      ---  1.0000       ---   -0.118
+ channel8     66     85 -8.399e-06 0.2641 0.7706     --- 0.9666      --- 0.9666      --- 0.9156      ---  1.0000       ---   -0.191
+ channel9     66     85 -3.663e-07 0.9666 0.9666     --- 0.9666      --- 0.9666      --- 1.0000      ---  1.0000       ---   -0.031
+channel10     66     85 -1.399e-05 0.1140 0.7706     --- 0.9666      --- 0.9121      --- 0.5968      ---  1.0000       ---   -0.191
+channel11     66     85 -6.653e-06 0.3917 0.7706     --- 0.9666      --- 0.9666      --- 0.9888      ---  1.0000       ---   -0.121
+channel12     66     85 -8.809e-06 0.3779 0.7706     --- 0.9666      --- 0.9666      --- 0.9858      ---  1.0000       ---   -0.142
+channel13     66     85 -8.028e-06 0.3209 0.7706     --- 0.9666      --- 0.9666      --- 0.9628      ---  1.0000       ---   -0.165
+channel14     66     85 -9.437e-06 0.2900 0.7706     --- 0.9666      --- 0.9666      --- 0.9414      ---  1.0000       ---   -0.179
+channel15     66     85 -3.383e-06 0.7050 0.8057     --- 0.9666      --- 0.9666      --- 1.0000      ---  1.0000       ---   -0.103
+channel16     66     85 -5.511e-06 0.5675 0.7706     --- 0.9666      --- 0.9666      --- 1.0000      ---  1.0000       ---   -0.071
+
+── Per-channel results (Mann-Whitney — all three corrections) ──
+  channel  p_raw p_FDR-BH sig_FDR p_Hochberg sig_Hoch p_Hommel sig_Homm   rb_r
+ channel1 0.3965   0.9631     ---     0.9970      ---   0.9970      ---  0.081
+ channel2 0.6659   0.9631     ---     0.9970      ---   0.9970      ---  0.041
+ channel3 0.4485   0.9631     ---     0.9970      ---   0.9970      ---  0.072
+ channel4 0.5773   0.9631     ---     0.9970      ---   0.9970      ---  0.053
+ channel5 0.7826   0.9631     ---     0.9970      ---   0.9970      ---  0.026
+ channel6 0.6549   0.9631     ---     0.9970      ---   0.9970      --- -0.043
+ channel7 0.5456   0.9631     ---     0.9970      ---   0.9970      ---  0.058
+ channel8 0.4720   0.9631     ---     0.9970      ---   0.9970      ---  0.068
+ channel9 0.9970   0.9970     ---     0.9970      ---   0.9970      ---  0.001
+channel10 0.3776   0.9631     ---     0.9970      ---   0.9970      ---  0.084
+channel11 0.6124   0.9631     ---     0.9970      ---   0.9970      ---  0.048
+channel12 0.8881   0.9631     ---     0.9970      ---   0.9970      ---  0.014
+channel13 0.4794   0.9631     ---     0.9970      ---   0.9970      ---  0.067
+channel14 0.4552   0.9631     ---     0.9970      ---   0.9970      ---  0.071
+channel15 0.9029   0.9631     ---     0.9970      ---   0.9970      ---  0.012
+channel16 0.8748   0.9631     ---     0.9970      ---   0.9970      --- -0.015
+
+[✓] Results saved → results_psd_nagg_vs_hc_hard_easy/results_psd_nagg_vs_hc_hard_easy.csv
+[✓] Figures saved → results_psd_nagg_vs_hc_hard_easy/figures/
+
+── Interaction analysis: PSD-AGG vs HC ──
+   Model : channel ~ C(group) × (wais_matrix + sud)
+   FDR-BH correction across 16 targets per interaction term
+
+  group × WAIS_MATRIX  
+  channel       beta     t  p_raw  p_FDR sig
+ channel1 -4.757e-06 -1.98 0.0498 0.7975 ---
+ channel2 -1.631e-06 -0.65 0.5153 0.8822 ---
+ channel3 -2.379e-06 -0.91 0.3667 0.8822 ---
+ channel4 -2.310e-06 -0.96 0.3375 0.8822 ---
+ channel5 -9.402e-07 -0.43 0.6680 0.8822 ---
+ channel6 -1.154e-06 -0.60 0.5470 0.8822 ---
+ channel7 -7.275e-07 -0.30 0.7613 0.8822 ---
+ channel8 -3.659e-08 -0.02 0.9853 0.9853 ---
+ channel9  8.863e-07  0.38 0.7047 0.8822 ---
+channel10  6.734e-07  0.29 0.7748 0.8822 ---
+channel11  6.059e-07  0.29 0.7707 0.8822 ---
+channel12  8.849e-07  0.33 0.7407 0.8822 ---
+channel13 -2.790e-06 -1.30 0.1949 0.8822 ---
+channel14 -5.341e-07 -0.22 0.8229 0.8822 ---
+channel15 -1.623e-06 -0.68 0.4974 0.8822 ---
+channel16 -5.641e-07 -0.22 0.8270 0.8822 ---
+
+  group × SUD  
+  channel       beta     t  p_raw  p_FDR sig
+ channel1 -7.779e-06 -0.29 0.7726 0.9386 ---
+ channel2  1.653e-05  0.59 0.5550 0.9386 ---
+ channel3  1.197e-05  0.41 0.6841 0.9386 ---
+ channel4  2.070e-06  0.08 0.9386 0.9386 ---
+ channel5  1.515e-05  0.62 0.5362 0.9386 ---
+ channel6 -4.484e-06 -0.21 0.8339 0.9386 ---
+ channel7  7.349e-06  0.28 0.7836 0.9386 ---
+ channel8  3.849e-05  1.73 0.0851 0.9386 ---
+ channel9 -1.316e-05 -0.50 0.6146 0.9386 ---
+channel10  2.668e-05  1.02 0.3112 0.9386 ---
+channel11  6.048e-06  0.26 0.7945 0.9386 ---
+channel12 -3.094e-06 -0.10 0.9175 0.9386 ---
+channel13  1.792e-05  0.75 0.4552 0.9386 ---
+channel14 -2.104e-06 -0.08 0.9371 0.9386 ---
+channel15  6.189e-06  0.23 0.8167 0.9386 ---
+channel16  7.507e-06  0.26 0.7946 0.9386 ---
+
+[✓] Interaction results saved → results_psd_nagg_vs_hc_hard_easy/results_psd_nagg_vs_hc_hard_easy_interactions.csv
+
+
+====== PSD-AGG vs HC — corsi ======
+
+============================================================
+  PSD-AGG vs HC  |  fNIRS beta-coefficient analysis
+============================================================
+  Input : pcon-con_v7_allchannels.csv
+  Groups: PSD-AGG (n=66)  vs  HC (n=85)
+  Covariates : wais_matrix, sud
+  Targets    : 16  (Ch1, Ch2, Ch3, Ch4, Ch5, Ch6, Ch7, Ch8, Ch9, Ch10, Ch11, Ch12, Ch13, Ch14, Ch15, Ch16)
+  Alpha (FDR): 0.05
+============================================================
+
+── Descriptive statistics (covariates) ──
+        wais_matrix         sud      
+               mean   std  mean   std
+group                                
+HC            11.91  2.92  0.06  0.24
+PSD-AGG        9.41  4.12  0.29  0.46
+
+
+── Permutation tests  (5,000 perms, n=151 complete cases) ──
+  Cluster-forming |t| threshold: 1.976
+  Cluster 1: [Ch10]  mass=-2.349  p=0.1842  —
+
+── Per-channel results (ANCOVA — all corrections) ──
+  channel  n_pos  n_neg       beta  p_raw  p_FDR sig_FDR p_Hoch sig_Hoch p_Homm sig_Homm p_Pmax sig_Pmax p_Clust sig_Clust cohens_d
+ channel1     66     85  4.479e-06 0.4740 0.7770     --- 0.8114      --- 0.8114      --- 0.9976      ---  1.0000       ---    0.009
+ channel2     66     85 -2.537e-06 0.6721 0.7770     --- 0.8114      --- 0.8114      --- 1.0000      ---  1.0000       ---   -0.162
+ channel3     66     85  3.871e-06 0.5946 0.7770     --- 0.8114      --- 0.8114      --- 1.0000      ---  1.0000       ---    0.004
+ channel4     66     85  2.729e-06 0.6295 0.7770     --- 0.8114      --- 0.8114      --- 1.0000      ---  1.0000       ---   -0.015
+ channel5     66     85 -3.282e-06 0.5772 0.7770     --- 0.8114      --- 0.8114      --- 1.0000      ---  1.0000       ---   -0.119
+ channel6     66     85 -1.670e-06 0.7406 0.7899     --- 0.8114      --- 0.8114      --- 1.0000      ---  1.0000       ---   -0.150
+ channel7     66     85 -2.962e-06 0.5861 0.7770     --- 0.8114      --- 0.8114      --- 1.0000      ---  1.0000       ---   -0.141
+ channel8     66     85 -5.663e-06 0.2889 0.7770     --- 0.8114      --- 0.8114      --- 0.9478      ---  1.0000       ---   -0.148
+ channel9     66     85 -1.451e-06 0.8114 0.8114     --- 0.8114      --- 0.8114      --- 1.0000      ---  1.0000       ---   -0.088
+channel10     66     85 -1.317e-05 0.0202 0.3226     --- 0.3226      --- 0.3226      --- 0.1658      ---  0.1842       ---   -0.338
+channel11     66     85 -7.944e-06 0.1300 0.7770     --- 0.8114      --- 0.8114      --- 0.6746      ---  1.0000       ---   -0.253
+channel12     66     85 -5.687e-06 0.3585 0.7770     --- 0.8114      --- 0.8114      --- 0.9790      ---  1.0000       ---   -0.182
+channel13     66     85  2.439e-06 0.6682 0.7770     --- 0.8114      --- 0.8114      --- 1.0000      ---  1.0000       ---    0.041
+channel14     66     85  2.157e-06 0.6799 0.7770     --- 0.8114      --- 0.8114      --- 1.0000      ---  1.0000       ---    0.076
+channel15     66     85  4.855e-06 0.3536 0.7770     --- 0.8114      --- 0.8114      --- 0.9772      ---  1.0000       ---    0.065
+channel16     66     85  5.435e-06 0.2962 0.7770     --- 0.8114      --- 0.8114      --- 0.9538      ---  1.0000       ---    0.196
+
+── Per-channel results (Mann-Whitney — all three corrections) ──
+  channel  p_raw p_FDR-BH sig_FDR p_Hochberg sig_Hoch p_Hommel sig_Homm   rb_r
+ channel1 0.6417   0.8633     ---     0.9506      ---   0.9506      ---  0.044
+ channel2 0.4228   0.8633     ---     0.9506      ---   0.9506      ---  0.076
+ channel3 0.7075   0.8633     ---     0.9506      ---   0.9506      ---  0.036
+ channel4 0.7554   0.8633     ---     0.9506      ---   0.9506      --- -0.030
+ channel5 0.9506   0.9506     ---     0.9506      ---   0.9506      --- -0.006
+ channel6 0.3034   0.8633     ---     0.9506      ---   0.9506      ---  0.098
+ channel7 0.7198   0.8633     ---     0.9506      ---   0.9506      ---  0.034
+ channel8 0.4931   0.8633     ---     0.9506      ---   0.9506      ---  0.065
+ channel9 0.6269   0.8633     ---     0.9506      ---   0.9506      ---  0.046
+channel10 0.0901   0.8139     ---     0.9506      ---   0.9232      ---  0.161
+channel11 0.1017   0.8139     ---     0.9506      ---   0.9442      ---  0.156
+channel12 0.5283   0.8633     ---     0.9506      ---   0.9506      ---  0.060
+channel13 0.4361   0.8633     ---     0.9506      ---   0.9506      --- -0.074
+channel14 0.4851   0.8633     ---     0.9506      ---   0.9506      --- -0.066
+channel15 0.9223   0.9506     ---     0.9506      ---   0.9506      --- -0.009
+channel16 0.2958   0.8633     ---     0.9506      ---   0.9506      --- -0.099
+
+[✓] Results saved → results_psd_nagg_vs_hc_corsi/results_psd_nagg_vs_hc_corsi.csv
+[✓] Figures saved → results_psd_nagg_vs_hc_corsi/figures/
+
+── Interaction analysis: PSD-AGG vs HC ──
+   Model : channel ~ C(group) × (wais_matrix + sud)
+   FDR-BH correction across 16 targets per interaction term
+
+  group × WAIS_MATRIX  
+  channel       beta     t  p_raw  p_FDR sig
+ channel1 -1.543e-06 -0.93 0.3564 0.9040 ---
+ channel2  7.931e-07  0.50 0.6213 0.9040 ---
+ channel3 -1.414e-07 -0.07 0.9420 0.9722 ---
+ channel4 -1.618e-06 -1.07 0.2848 0.9040 ---
+ channel5  9.925e-07  0.63 0.5283 0.9040 ---
+ channel6 -2.939e-07 -0.22 0.8278 0.9542 ---
+ channel7  1.819e-06  1.26 0.2103 0.9040 ---
+ channel8  1.647e-06  1.16 0.2474 0.9040 ---
+ channel9  1.154e-06  0.71 0.4783 0.9040 ---
+channel10  3.131e-07  0.21 0.8349 0.9542 ---
+channel11  1.063e-06  0.76 0.4474 0.9040 ---
+channel12 -4.078e-07 -0.25 0.8055 0.9542 ---
+channel13 -1.701e-06 -1.12 0.2636 0.9040 ---
+channel14 -1.813e-06 -1.30 0.1940 0.9040 ---
+channel15  4.887e-08  0.03 0.9722 0.9722 ---
+channel16 -6.869e-07 -0.49 0.6215 0.9040 ---
+
+  group × SUD  
+  channel       beta     t  p_raw  p_FDR sig
+ channel1  3.517e-06  0.19 0.8505 0.9178 ---
+ channel2  3.491e-06  0.20 0.8456 0.9178 ---
+ channel3  1.945e-05  0.90 0.3709 0.9178 ---
+ channel4 -3.904e-06 -0.23 0.8169 0.9178 ---
+ channel5  1.189e-05  0.68 0.4991 0.9178 ---
+ channel6 -2.848e-06 -0.19 0.8503 0.9178 ---
+ channel7  1.018e-05  0.63 0.5295 0.9178 ---
+ channel8  9.706e-06  0.61 0.5411 0.9178 ---
+ channel9 -1.876e-06 -0.10 0.9178 0.9178 ---
+channel10  1.220e-05  0.73 0.4678 0.9178 ---
+channel11  2.854e-06  0.18 0.8550 0.9178 ---
+channel12 -7.710e-06 -0.42 0.6770 0.9178 ---
+channel13 -2.759e-06 -0.16 0.8708 0.9178 ---
+channel14 -5.473e-06 -0.35 0.7250 0.9178 ---
+channel15  2.343e-06  0.15 0.8810 0.9178 ---
+channel16  3.732e-06  0.24 0.8102 0.9178 ---
+
+[✓] Interaction results saved → results_psd_nagg_vs_hc_corsi/results_psd_nagg_vs_hc_corsi_interactions.csv
+

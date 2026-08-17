@@ -32,7 +32,15 @@ do
         col_nr=$(($c))
         amp=`awk -F, '$1 == "'$subj_id'" {print $'$col_nr'}' $csv_file`
         if [ -z "$amp" ]; then
+            # not found in csv: fall back to block-number amplitude (unchanged)
             modded_block=`echo $b`
+        elif [ "$amp" = "0" ]; then
+            # found in csv but scored 0 on this block: amplitude-modulating by
+            # a literal 0 zeroes the event out of the regressor entirely,
+            # producing an undefined design matrix if all of a subject's
+            # blocks are 0 (2026-08-17: 0053P, 1013KP, 1023KP, 1052KP, 1072KP).
+            # fall back to a static amplitude of 1 instead.
+            modded_block=`echo $b | sed 's/\*\([0-9]\+\):/*1:/'`
         else
             modded_block=`echo $b | sed 's/\*\([0-9]\+\):/*'$amp':/'`
         fi

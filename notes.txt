@@ -73,5 +73,209 @@ P+A 79                77
 
 New 1st level beta coefficient dumps have been made.
 
+-----------
+2026-08-17:
+-----------
+
+Computed new non-amplitude-modulated first-level GLM (na model): 4 separate
+static-amplitude block regressors (b1-b4) per subject/task/hemoglobin type,
+via 03_firstlevel_glm/splitTimingIntoStaticBlocks.sh +
+03_firstlevel_glm/first_level_glm_na.sh, with contrasts na-hard-easy
+(b3,b4 vs b1,b2) and na-corsi (mean of b1-b4).
+
+439 / 457 runs (hbo+hbr x corsi mem task) completed. 18 runs across 9
+subjects failed with a FATAL collinearity error (b3/b4 columns all zero)
+because the fNIRS recording ends before the hard blocks (3-4) were
+administered - i.e. the scan is shorter than the marked block onsets, so
+those blocks have zero data points. The old amplitude-modulated 2-regressor
+model (corsi_easy/corsi_hard) silently tolerated this because it merges 2
+blocks per regressor; splitting each block into its own regressor exposes
+it as a hard failure instead.
+
+Affected subjects (scan duration vs block 3/4 onsets, both hbo+hbr):
+  0051P  - scan 563.0s; blocks 2,3,4 onsets (577.8/578.8/580.4s) all beyond
+           scan end. blocks 3/4 also have anomalous ~1-1.5s durations
+           (probable marker glitch).
+  0004P  - scan 568.7s; block 3/4 onsets 580.8/670.6s beyond scan end.
+  0046P  - scan 502.9s; block 3/4 onsets 543.9/630.6s beyond scan end.
+  1046KP - scan 645.7s; block 3/4 onsets 701.7/797.0s beyond scan end.
+  1056KP - scan 581.9s; block 4 onset 732.6s beyond scan end.
+  1042KP - scan 658.9s; block 3/4 onsets 704.9/805.9s beyond scan end.
+  2086K  - scan 518.2s; block 3/4 onsets 529.5/613.7s beyond scan end.
+  2091K  - scan 580.4s; block 3/4 onsets 615.1/695.7s beyond scan end.
+  2090K  - scan 534.5s; block 3/4 onsets 563.2/641.2s beyond scan end.
+
+Decision: excluded these 9 subjects (18 runs) from the na model rather than
+forcing 3dDeconvolve past the warning (-GOFORIT), since the hard-block
+regressors have no usable data for them and any na-hard-easy/na-corsi
+estimate would be meaningless. Remaining 439 completed runs checked for
+sub-brick structure (b1-b4 coef/tstat, na-hard-easy_GLT, na-corsi_GLT) and
+scanned for NaN/Inf - all clean.
+
+UPDATE (same day, later): the above "18 runs excluded due to scan
+truncation" diagnosis was itself a symptom of a much deeper, dataset-wide
+bug - see below. It has been superseded; after the fix, 0 of 457 runs are
+excluded for this reason (see the entry below).
+
+-----------
+2026-08-17 (continued): timing-offset bug found and fixed
+-----------
+
+While debugging a data-quality question raised during na model group
+analysis (also switching first_level_glm_na.sh from -polort 6 to -polort A
+- see below), found that essentially every subject's block-onset timing was
+silently misaligned relative to their actual fNIRS recording - not a
+data-cut/truncation problem, a clock-reference-frame bug.
+
+Root cause (01_dataConversion/fnirsoft2nii/export2nii.py):
+  - marker2onsetdur() wrote block onset times using the RAW recording's
+    absolute clock (e.g. block 5 onset = 510.705s for 1068KP).
+  - data2nii() builds the exported .nii starting at marker -5 (task start),
+    so frame 0 of the .nii is NOT absolute time zero - it's whatever the
+    raw clock read when marker -5 fired (96.56s for 1068KP; ranges 12-232s
+    across the dataset, median 35.6s).
+  - Nothing subtracted that offset. 3dDeconvolve is called with
+    -local_times, which (per AFNI docs) interprets onsets as relative to
+    the start of the analyzed run (frame 0) - so every block in every
+    subject's design matrix was scheduled up to ~4 minutes away from where
+    it actually happened in the data.
+
+This is what caused the apparent "block 4 truncation" above: comparing
+absolute-clock onsets against the (offset, but otherwise essentially
+complete) recording made block 4 look almost entirely missing for ~99% of
+subjects, when correcting for the marker -5 offset showed the real
+recordings were fine (413/439 had >=99% of block 4 actually captured once
+correctly time-aligned).
+
+Fix: marker2onsetdur() now subtracts marker -5's time from every onset
+before writing onsetdur.txt, so times are run-relative as -local_times
+expects. Also added a -skip_nii flag to export2nii.py (regenerate only
+timing.txt/onsetdur.txt, skip the slow per-timepoint .nii reconstruction -
+unaffected by this bug, so didn't need to be redone) and fixed a few
+hardcoded /mnt/speyside paths (this dataset is also mounted at
+/mnt/highlands and /mnt/bellevue; the paths are now resolved relative to
+the script's own location).
+
+Also found and fixed, while regenerating: marker2onsetdur() assumed
+exactly one each of markers -5,101-105,106 with no validation. Two subjects
+have malformed marker sets that passed the existing trim_marker()
+try/except (which only catches missing start/end markers, not wrong
+counts/duplicates in between) and crashed the batch:
+  0020P - a duplicate 101 marker (dropped by drop_duplicates, keep='last')
+  0028P - markers 104 and 105 entirely missing (task was cut short) -
+          already flagged in this file, 2026-02-02 entry ("Missing
+          Markers"); confirmed still has no prp_0028P.*.mem.fnirs.nii at
+          all, i.e. was never converted for the corsi task, unrelated to
+          this bug.
+Added a check right after trim_marker() that verifies the full expected
+marker set is present, skipping (not crashing) subjects that aren't.
+0020P recovered via a second acquisition attempt in its raw files after
+the first was correctly skipped; 0028P remains excluded (no data).
+
+Backed up all pre-fix onsetdur.txt/timing.txt/timing.1D to
+data_aux/backup_pre_offset_fix_2026-08-17/timing_metadata_backup.tar.gz
+before regenerating.
+
+Full reprocessing after the fix (na model only - the old amplitude-
+modulated model uses the same buggy timing.1D chain and has NOT been
+redone yet):
+  1. export2nii.py -skip_nii rerun for every subject x {hbo,hbr} (464 runs,
+     0 crashes, 4 gracefully skipped = 0020P/0028P x 2 tags)
+  2. onsetDur2afniDecon.sh rerun (timing.1D regenerated from corrected
+     onsetdur.txt)
+  3. splitTimingIntoStaticBlocks.sh rerun - 0 blocks now need dropping for
+     insufficient capture (down from "435/439 runs had block 4 <95%
+     captured" before the fix - that was the offset artifact)
+  4. first_level_glm_na_wrapper.sh rerun (-polort A) - 457/457 succeeded
+     (up from 439/457 - the 18 hard failures were also the offset bug: with
+     onsets correctly placed, no subject has a fully-out-of-range block)
+  5. checked all 457 results for outlier/degenerate betas (the kind seen
+     transiently while debugging: single subject 1068KP had beta=-201 on
+     one channel from a near-zero-captured, wrongly-offset block) - none
+     remain, full range now -0.066 to 0.026 (na-hard-easy) / -0.016 to
+     0.009 (na-corsi) across all subjects x channels
+  6. sublists, beta dumps, and group-level comparisons (04p5_secondlevel_
+     group_na/) all redone - subject counts back to the full raw totals
+     (con 85, lrv 77, pcon 67 on hbo), vs. 82/74/64 before
+
+Group-level results changed substantially post-fix (previously null across
+all 6 comparisons; see 04p5_secondlevel_group_na/dumpFirstLevel_betaCoefs/
+results_*/ for full per-channel tables):
+  - PSD+AGG vs HC, na-hard-easy: 3 clusters significant (cluster-perm) -
+    Ch3 (p=.008), Ch6-7 (p=.003), Ch9-16 (p=.045); most of that same
+    channel range also survives FDR/perm-max-stat individually
+  - PSD-AGG vs HC, na-hard-easy: Ch9-12 cluster significant (p=.0002)
+  - PSD+AGG vs PSD-AGG, na-corsi: group x covariate interaction
+    significant across nearly all 16 channels (FDR-corrected)
+  - PSD+AGG vs PSD-AGG, na-hard-easy: Ch6, Ch10 significant
+
+Given the scale of this fix (every subject's regressor timing was wrong to
+some degree, ranging 12-232s), the OLD amplitude-modulated first-level
+model and every prior group-level analysis (04_secondlevel_group/
+dumpFirstLevel_betaCoefs/analysis_2026-06-26, 2026-06-27, 2026-07-04) were
+built on the same misaligned timing and should be treated as unreliable
+until/unless rerun with corrected timing.1D. Not yet done as of this entry.
+
+-----------
+2026-08-17 (continued): old amplitude-modulated model + group analysis redone
+-----------
+
+Redid the old model (corsi_easy/corsi_hard, amplitude-modulated by corsi
+score) with the corrected timing.1D chain above, and its group-level
+comparison, per the same rules as the na model (sans/saps excluded from
+covariates throughout).
+
+Also applied -polort A to 03_firstlevel_glm/first_level_glm.sh (was
+-polort 6), for the same reason as the na model (see earlier entry today) -
+this wasn't explicitly requested but follows directly from the already-
+agreed rationale, applied consistently rather than leaving the old model on
+a fixed order known to be too aggressive for these run lengths.
+
+Regenerating model.b2-3.1D/model.b4-5.1D via remodulateBlocks.sh (corrected
+timing.1D + data_aux/corsi.csv) surfaced a second, unrelated pre-existing
+data issue: 5 subjects (0053P, 1013KP, 1023KP, 1052KP, 1072KP) have a
+literal all-zero row in corsi.csv (Block_2 through Click_tot all 0).
+Amplitude-modulating by a literal 0 zeroes that block out of the regressor
+entirely; with every block zeroed, 3dDeconvolve reported "Signal-only
+matrix condition: UNDEFINED ** VERY BAD **" for all 10 runs (5 subjects x
+hbo/hbr) - GOFORIT 6 let them through anyway, silently, so this would not
+have been caught without inspecting individual subjects' matrix warnings.
+Per instruction: when a block's corsi.csv score is exactly 0, fall back to
+a static amplitude of 1 for that block (remodulateBlocks.sh) rather than
+using the literal 0 or falling back to block-number amplitude (the existing
+"not found in csv" fallback, left unchanged). All 457 runs then completed
+with no matrix warnings and no outlier betas (checked full range: -0.0005
+to 0.0012 hard-easy, -0.0008 to 0.0008 corsi, across all subjects x
+channels).
+
+Also fixed the same class of issues found in the na dumpFirstLevel_
+betaCoefs/ setup: dumpBetaCoefs_allChannels.sh's hardcoded /mnt/speyside
+paths (template_mask, covariate_file) don't exist on this mount; pointed
+template_mask at a relative path and covariate_file at a freshly-built
+local select.cov.local.1D (prep_select_cov_local.py, same wais_matrix/sud
+merge as the na model's prep_select_cov_na.py, since the canonical
+data_aux/select.cov.1D here is stale - see earlier entry). Also fixed
+add_covariates.py's delim_whitespace pandas incompatibility.
+
+Full sample recovered here too: subject counts back to 85/77/67
+(HC/PSD+AGG/PSD-AGG) on hbo, matching the na model and the raw subject
+folder counts.
+
+Group-level results (sans/saps excluded; HC comparisons: wais_matrix, sud;
+PSD+AGG vs PSD-AGG: wais_matrix, sud, dose) - see
+04_secondlevel_group/dumpFirstLevel_betaCoefs/analysis_2026-08-17/:
+  - PSD+AGG vs HC: no significant channels or clusters (hard-easy or corsi)
+  - PSD-AGG vs HC: no significant channels or clusters (hard-easy or corsi)
+  - PSD+AGG vs PSD-AGG, corsi: Ch15-16 cluster significant (p=.049);
+    Ch16 also significant individually (FDR, perm-max-stat)
+  - PSD+AGG vs PSD-AGG, hard-easy: Ch15-16 cluster trend (p=.076, ns)
+
+Much narrower than the na model's result (which found significant effects
+in PSD+AGG vs HC and PSD-AGG vs HC, and a much wider corsi interaction
+effect for PSD+AGG vs PSD-AGG). Both models now use correctly time-aligned
+data, so this is read as the two parameterizations differing in
+sensitivity/power (na's 4 separate static-amplitude block regressors vs.
+this model's 2 merged, corsi-score-amplitude-modulated regressors) rather
+than either being wrong - not yet reconciled/interpreted further.
 
 

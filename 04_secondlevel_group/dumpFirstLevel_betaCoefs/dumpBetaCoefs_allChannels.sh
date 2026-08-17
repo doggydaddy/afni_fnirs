@@ -9,8 +9,12 @@ volume_index=$5
 
 output_filename=$6
 
-template_mask='/mnt/speyside/karim_fnirs/afni_fnirs/templates/biopac16ch_template_mask.nii'
-covariate_file='/mnt/speyside/karim_fnirs/data_aux/select.cov.1D'
+template_mask='../../templates/biopac16ch_template_mask.nii'
+# local, regenerated covariate file (includes wais_matrix/sud) - see
+# prep_select_cov_local.py; the canonical data_aux/select.cov.1D on this
+# mount is stale (missing those columns), and the original hardcoded
+# /mnt/speyside path doesn't exist on this mount either.
+covariate_file='select.cov.local.1D'
 
 
 for((channel_nr=1; channel_nr<=16; channel_nr++))

@@ -14,10 +14,14 @@ np.set_printoptions(suppress=True)
 # ------------------
 # "static" variables
 # ------------------
-# paths to template files (.nii and .txt)
-template_nii_path =  '/mnt/speyside/karim_fnirs/afni_fnirs/templates/biopac16ch_template.nii'
-template_txt_path =  '/mnt/speyside/karim_fnirs/afni_fnirs/templates/biopac16ch_template.txt'
-mirrored_data_list = '/mnt/speyside/karim_fnirs/data/mirror_list.txt'
+# paths to template files (.nii and .txt), resolved relative to this script's
+# location rather than hardcoded to one host's mount name (e.g. /mnt/speyside)
+# so the script runs unchanged on any mount aliasing the same karim_fnirs tree
+# (highlands, bellevue, speyside, ...).
+_karim_fnirs_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+template_nii_path =  os.path.join(_karim_fnirs_root, 'afni_fnirs', 'templates', 'biopac16ch_template.nii')
+template_txt_path =  os.path.join(_karim_fnirs_root, 'afni_fnirs', 'templates', 'biopac16ch_template.txt')
+mirrored_data_list = os.path.join(_karim_fnirs_root, 'data', 'mirror_list.txt')
 # TR is set here since all datasets should in theory have the same TR
 tr = 0.51
 
@@ -30,8 +34,12 @@ parser.add_argument('-foldername',
                     help='input directory name')
 parser.add_argument('-tag', 
                     help='valid tags are hbo, hbt, hbr, and oxy')
-parser.add_argument('-prefix', 
+parser.add_argument('-prefix',
                     help='prefix for output files')
+parser.add_argument('-skip_nii', action='store_true',
+                    help='skip writing .nii files (only (re)generate timing.txt/onsetdur.txt). '
+                         'Useful for reprocessing timing metadata alone without repeating the '
+                         'slow per-timepoint .nii reconstruction, e.g. after a marker2onsetdur fix.')
 if len(sys.argv)==1:
     parser.print_help(sys.stderr)
     sys.exit(1)
@@ -138,7 +146,16 @@ def split_data(data, marker, start_marker, end_marker):
     return( output_data )
 
 def marker2onsetdur(marker):
-    onsets = marker['NearestTime']
+    # data2nii() builds the exported .nii starting at marker -5 (task start),
+    # so frame 0 of the .nii corresponds to marker -5's absolute recording
+    # time, not absolute time zero. First-level GLM scripts use 3dDeconvolve
+    # with -local_times, which interprets onsets as relative to the start of
+    # the analyzed run (frame 0) - so onsets here must be re-zeroed to marker
+    # -5's time, or every downstream regressor is offset by that (per-subject,
+    # 12-232s in this dataset) amount relative to where it actually occurs in
+    # the exported data.
+    t0 = marker.loc[marker['MarkerType'] == -5, 'NearestTime'].values[0]
+    onsets = marker['NearestTime'] - t0
     durations= onsets.diff()
     ons = onsets[:-1].values
     dur = durations.drop([0]).values
@@ -257,6 +274,22 @@ for i in range(len(tag_files)):
         print("getting vs-mem part of the marker failed! skipping export")
         export_mem_flag = False
 
+    # marker2onsetdur() assumes exactly one each of markers -5,101,102,103,
+    # 104,105,106 (start, 5 block onsets, end). trim_marker()/drop_duplicates()
+    # don't guarantee that - e.g. a spuriously repeated block-onset marker
+    # alongside missing ones (both seen in this dataset) passes trim_marker
+    # without raising, but leaves marker_mem the wrong shape and would corrupt
+    # (or crash) onsetdur.txt. Catch that here instead of downstream.
+    if export_mem_flag:
+        expected_types = {-5, 101, 102, 103, 104, 105, 106}
+        found_types = set(marker_mem['MarkerType'].values)
+        if found_types != expected_types:
+            missing = sorted(expected_types - found_types)
+            unexpected = sorted(found_types - expected_types)
+            print(f"vs-mem markers incomplete/malformed (missing={missing}, "
+                  f"unexpected={unexpected})! skipping export")
+            export_mem_flag = False
+
 
     # ------------
     # output files
@@ -271,8 +304,11 @@ for i in range(len(tag_files)):
 
     # saving go-nogo
     if export_gonogo_flag:
-        print("saving go-no-go")
-        data2nii(data_gonogo, gonogo_outfilename)
+        if args.skip_nii:
+            print("skipping go-no-go .nii (skip_nii)")
+        else:
+            print("saving go-no-go")
+            data2nii(data_gonogo, gonogo_outfilename)
 
     # saving mem data/marker pair
     # note: onsetdur output may be used as entry to AFNI's timing_tool.py with -fsl_timing_files flag:
@@ -283,5 +319,8 @@ for i in range(len(tag_files)):
         marker_mem.to_csv(mem_marker_outfilename, sep=' ', index=False)
         onsetdur_mem = marker2onsetdur(marker_mem)
         onsetdur_mem.to_csv(mem_onsetdur_outfilename, sep=' ', index=False, header=False )
-        print("saving data to: " + mem_outfilename)
-        data2nii(data_mem, mem_outfilename)
+        if args.skip_nii:
+            print("skipping .nii for " + mem_outfilename + " (skip_nii)")
+        else:
+            print("saving data to: " + mem_outfilename)
+            data2nii(data_mem, mem_outfilename)

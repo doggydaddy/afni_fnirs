@@ -23,6 +23,9 @@ run_*.log
 # Subject lists (sensitive; match the existing convention at 04_secondlevel_group/ root)
 *sublist*
 
+# Regenerated covariate file (sensitive: clinical/substance-use data)
+select.cov.local.1D
+
 # One-off / scratch
 test_output.csv
 

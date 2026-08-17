@@ -71,7 +71,7 @@ echo "task_id = " $task_id
 
 
 3dDeconvolve -input ${input_nii} \
-             -polort 6 -GOFORIT 6 -noFDR \
+             -polort A -GOFORIT 6 -noFDR \
              -mask ${mask_nii} \
              -num_stimts 2 \
              -stim_times_AM1 1 ${i_path}/${subj_id}.${type_id}.${task_id}.model.b2-3.1D 'dmBLOCK' -stim_label 1 corsi_easy -local_times \

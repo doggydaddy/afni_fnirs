@@ -6,4 +6,11 @@
 __pycache__/
 *.pyc
 
+# Combined analysis reports (top-level, e.g. analysis_<date>/) - the
+# generated stats report is excluded, matching the analysis_*/ exclusion
+# convention used inside dumpFirstLevel_betaCoefs/ for per-subject-derived
+# aggregate output. The narrative report and generator script are kept.
+/analysis_*/report.md
+/analysis_*/report.html
+
 

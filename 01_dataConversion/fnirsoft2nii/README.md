@@ -43,3 +43,16 @@ This script takes a LONG time to run, mostly because of manipulation of many
 temporary files during the conversion process. Please run this script on a fast
 hard-drive as loading the temporary data to memory isn't feasible in one of the
 crucial steps.
+
+Pass `-skip_nii` to regenerate only timing.txt/onsetdur.txt (skips the slow
+per-timepoint .nii reconstruction). Useful for reprocessing timing metadata
+alone, e.g. after a fix to the marker/timing logic - the .nii export doesn't
+depend on it and doesn't need to be redone.
+
+## timing offset (fixed 2026-08-17)
+
+marker2onsetdur() writes onset times relative to marker -5 (task start),
+matching frame 0 of the exported .nii (data2nii() starts the export there).
+Downstream 3dDeconvolve calls use -local_times, which expects onsets
+relative to the start of the analyzed run - so this alignment matters. See
+../../notes.txt (2026-08-17) for the bug this fixed and its impact.
