@@ -14,7 +14,7 @@ Each report contains:
     full ANCOVA channel table (all corrections), Mann-Whitney table
   - Cross-comparison discussion paragraph
 
-Usage (from dumpFirstLevel_betaCoefs/):
+Usage (from 04_secondlevel_group/):
   python generate_report.py [--base-dir .] [--output-dir .] [--alpha 0.05]
 """
 

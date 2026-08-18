@@ -9,8 +9,10 @@
 # and provides no additional FWER protection. FDR-BH, Hommel, and perm max-stat
 # remain the primary multiple-comparison controls.
 
-PY=/mnt/speyside/karim_fnirs/afni_fnirs/04_secondlevel_group/.venv/bin/python
-SCRIPT=analyze_psd_agg_vs_psd_nagg.py
+SCRIPT_DIR=${0:A:h}
+PY=${GROUP_ANALYSIS_PYTHON:-$SCRIPT_DIR/.venv/bin/python}
+[[ -x $PY ]] || PY=python3
+SCRIPT=$SCRIPT_DIR/analyze_psd_agg_vs_psd_nagg.py
 
 # Covariate sets (same logic as the channel runner)
 COVARS_HC="sans saps wais_matrix sud"

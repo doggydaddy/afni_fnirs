@@ -6,16 +6,14 @@ patients with aggression history (`patienter_lrv` / lrv / PSD+AGG),
 psychiatric patients without (`patienter_kontroll` / pcon / PSD-AGG). Data
 lives outside this repo, as a sibling directory: `../data/<group>/<subject>/`.
 
-Pipeline stages are numbered directories, run in order. `04p5_secondlevel_group_na`
-is a second, parallel group-analysis branch for an alternate first-level
-model (see `03_firstlevel_glm`) — not a later pipeline stage, a sibling to `04`.
+Pipeline stages are numbered directories and run in order. Both first-level
+model variants feed the shared `04_secondlevel_group` implementation.
 
 ```
 01_dataConversion       fnirsoft export -> NIfTI + block-timing files
 02_preprocessing        scale to %-signal-change, bandpass filter
 03_firstlevel_glm       per-subject GLM (two model variants)
-04_secondlevel_group    group-level stats, amplitude-modulated model
-04p5_secondlevel_group_na   group-level stats, na model
+04_secondlevel_group    group-level stats, both model variants
 05_make_figure          channel-statistic CSV -> brain-surface figure
 templates/              shared 16-channel montage mask + coordinates
 ```
@@ -197,8 +195,8 @@ needed for `-stim_times`/`3dROIstats` sub-brick selectors downstream:
   scripts select.
 - na: `0`=Full_Fstat, `1-8`=b1–b4 coef/tstat pairs,
   `9-10`=na-hard-easy_GLT coef/tstat, `11-12`=na-corsi_GLT coef/tstat.
-  **Volume 9 = na-hard-easy, volume 11 = na-corsi** — selected by
-  `04p5_secondlevel_group_na`'s dump scripts.
+  **Volume 9 = na-hard-easy, volume 11 = na-corsi** — selected by the same
+  `04_secondlevel_group` channel-dump routine.
 
 `splitTimingIntoBlocks.sh` is an older, simpler block-splitter (keeps
 block-number as amplitude, no corsi-score lookup) — superseded by
@@ -206,26 +204,27 @@ block-number as amplitude, no corsi-score lookup) — superseded by
 
 ---
 
-## 04_secondlevel_group — group analysis, amplitude-modulated model
+## 04_secondlevel_group — group analysis, both models
 
 Takes the per-subject `stats.*.nii.gz` buckets from `03_firstlevel_glm`
 and produces group-comparison statistics, channel by channel.
 
 ### 1. Subject lists
 
-```
-cd fix_sublists && ./update_sublists.sh
+```text
+cd 04_secondlevel_group
+./update_sublists.sh       # amplitude model
+./update_sublists_na.sh    # na model
 ```
 Writes `{con,lrv,pcon}.{hbo,hbr}.sublist.txt` — one path per subject with a
-completed `stats.*.nii.gz` (`find ... -name 'stat*<type>*.nii.gz'`; must be
-filtered to exclude `*.na.nii.gz` if both models have been run in the same
-tree). Copy the `hbo` lists into `dumpFirstLevel_betaCoefs/` for the next
-step (that's where the group-comparison scripts actually read them from).
+completed `stats.*.<type>.mem.nii.gz`. The shared list generator uses an exact
+filename pattern, so amplitude-modulated lists cannot accidentally include
+the parallel `*.na.nii.gz` buckets. The na wrapper writes the corresponding
+`*.na.sublist.txt` files.
 
 ### 2. Dump per-channel beta coefficients to CSV
 
-```
-cd dumpFirstLevel_betaCoefs
+```text
 ./dumpBetaCoefs_allChannels.sh <group1 sublist> <group1 label> <group2 sublist> <group2 label> <volume idx> <output.csv>
 ```
 
@@ -240,13 +239,14 @@ per-channel temp files into one CSV (`channel1`...`channel16` columns).
 `relabel_groups.sh` renames the internal group tags (`lrv`→`PSD+AGG`,
 `pcon`→`PSD-AGG`, `con`→`HC`) via `sed`.
 
-Covariate file: `covariate_file` in `dumpBetaCoefs_allChannels.sh` — build
-it with `prep_select_cov.py` (merges `data_aux/covars.1D`'s
+These helpers are the single implementation for both second-level models.
+Use volumes 5/7 for the amplitude model and 9/11 for the na model.
+
+Covariate file: build it with `prep_select_cov_local.py` (merges
+`data_aux/covars.1D`'s
 sans/saps/wais_matrix/dose with a binarized substance-use flag pulled from
-the Mindata xlsx) or `prep_select_cov_local.py` (same logic, portable
-paths, writes a local copy rather than overwriting the shared
-`data_aux/select.cov.1D` — use this if the canonical file is stale/missing
-columns on your mount).
+the Mindata xlsx). It derives portable paths from the repository location and
+writes an ignored local file. `--data-aux` and `--output` override both paths.
 
 ### 3. Group-level statistics
 
@@ -266,11 +266,14 @@ group×covariate interaction term separately. Writes a results CSV, an
 interactions CSV, and 3 figures (group means, correction-method heatmap,
 volcano plot) per comparison.
 
-`run_all_analyses.sh` (or the dated `run_all_analyses_<date>.sh` variant —
-copy and edit the covariate lists per run) drives all 6 standard
-comparisons: {PSD+AGG, PSD-AGG} × {HC} and PSD+AGG × PSD-AGG, on both
-`hard-easy` and `corsi`. HC comparisons drop `dose` (all HC have dose=0,
-perfectly collinear with group).
+`run_all_analyses.sh` delegates to the shared `run_group_analyses.sh`
+comparison matrix and drives all 6 standard comparisons: {PSD+AGG, PSD-AGG}
+× {HC} and PSD+AGG × PSD-AGG, on both `hard-easy` and `corsi`. HC comparisons
+drop `dose` (all HC have dose=0, perfectly collinear with group). Pass
+`--dry-run` to inspect the commands without reading sensitive inputs or
+writing results. The legacy amplitude entry point retains SANS/SAPS for the
+patient-only comparison; the dated amplitude entry point and na wrapper use
+the established symptom-excluded profile.
 
 ### 4. Report
 
@@ -300,30 +303,30 @@ already-dumped `*_allchannels.csv` files without re-running the (expensive,
 one-`3dROIstats`-call-per-channel-per-subject) dump pipeline, by joining on
 subject ID. Historical patch tool, not part of the normal per-run pipeline.
 
-`fix_sublists/filter_sublists_cov.sh` / `find_missing_subjects.sh` —
+`filter_sublists_cov.sh` / `find_missing_subjects.sh` —
 utilities for cross-checking subject lists against the covariate file.
 
----
+### Non-amplitude-modulated model
 
-## 04p5_secondlevel_group_na — group analysis, na model
+Uses the same subject-list generator, channel-dump helpers, covariate builder,
+statistical engine, and six-comparison runner as `04_secondlevel_group`,
+configured for `stats.*.mem.na.nii.gz` buckets (sub-brick 9=na-hard-easy,
+11=na-corsi instead of 5/7). The na-named entry points remain in this
+directory for call compatibility.
 
-Mirrors `04_secondlevel_group` exactly, pointed at the na model's
-`stats.*.mem.na.nii.gz` buckets (sub-brick 9=na-hard-easy, 11=na-corsi
-instead of 5/7) and its own `.venv`-independent covariate/mask path fixes.
-
-```
-./update_sublists_na.sh                                    # con/lrv/pcon.{hbo,hbr}.na.sublist.txt (excludes stats.*.na.nii.gz's non-na counterpart automatically, since it only globs *na.nii.gz)
-cd dumpFirstLevel_betaCoefs
-./dumpBetaCoefs_allChannels.sh ... 9|11 <output.csv>        # same grab_betas.sh/add_covariates.py/merge_channel_dumps.py/relabel_groups.sh chain as 04
-./run_all_analyses_na.sh                                    # same analyze_psd_agg_vs_psd_nagg.py, na model's 6 comparisons
+```text
+./update_sublists_na.sh                                    # con/lrv/pcon.{hbo,hbr}.na.sublist.txt
+./prep_select_cov_na.py                                    # shared local covariate table
+./dumpBetaCoefs_allChannels.sh ... 9|11 <output.csv>        # shared 16-channel dump
+./run_all_analyses_na.sh [--dry-run]                       # shared comparison matrix
 ```
 
 A subject with no `stats.*.na.nii.gz` (na model 3dDeconvolve failed or
 wasn't run) is automatically absent from the sublists — no special
 exclusion handling needed, `find` just won't match it.
 
-`prep_select_cov_na.py` — same portable covariate-file builder as
-`04_secondlevel_group/dumpFirstLevel_betaCoefs/prep_select_cov_local.py`.
+The wrappers select na-specific input and result names while leaving all
+analysis logic in the shared implementation.
 
 ---
 
@@ -370,7 +373,7 @@ coordinate mapping in `fNIRS_template.txt`.
 `biopac16ch_template.nii`/`.txt` — the 16-channel biopac montage: 16
 single-voxel "channels" at fixed grid coordinates, used as the `-master`
 for `3dUndump` in `01_dataConversion` and as the channel-index reference
-for `03_firstlevel_glm`/`04_secondlevel_group`/`04p5_secondlevel_group_na`'s
+for `03_firstlevel_glm` and `04_secondlevel_group`'s
 `biopac16ch_template_mask.nii` (channel-labeled mask, values 1–16, one
 voxel-pair per channel — used both as the whole-brain analysis mask in
 `3dDeconvolve` and, isolated per channel via `3dcalc within(a,N,N)`, for

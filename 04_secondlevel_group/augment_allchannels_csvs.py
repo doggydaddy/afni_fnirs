@@ -14,8 +14,8 @@ covariate columns. So we just join them in by subject ID.
 
 Sources
 -------
-* wais_matrix:  /mnt/speyside/karim_fnirs/data_aux/covars.1D
-* sud (raw):    /mnt/speyside/karim_fnirs/data_aux/Mindata1 (kopia).xlsx
+* wais_matrix:  <data_aux>/covars.1D
+* sud (raw):    <data_aux>/Mindata1 (kopia).xlsx
                   column "substance abuse "  →  binarize 0→0, 1-6→1
                   missing IDs → impute 0 (population mode; HCs default)
 
@@ -40,9 +40,6 @@ from pathlib import Path
 import pandas as pd
 
 
-COVARS_1D = Path("/mnt/speyside/karim_fnirs/data_aux/covars.1D")
-XLSX      = Path("/mnt/speyside/karim_fnirs/data_aux/Mindata1 (kopia).xlsx")
-
 # CSV basenames to augment (the .csv suffix is added automatically)
 CSV_BASES = [
     "lrv-con_v5_allchannels",
@@ -54,21 +51,23 @@ CSV_BASES = [
 ]
 
 
-def load_lookups() -> pd.DataFrame:
+def load_lookups(data_aux: Path) -> pd.DataFrame:
     """Return DataFrame indexed by subject id with columns wais_matrix, sud."""
+    covars_1d = data_aux / "covars.1D"
+    workbook_path = data_aux / "Mindata1 (kopia).xlsx"
     # ── wais_matrix from covars.1D ───────────────────────────────────────────
-    covars = pd.read_csv(COVARS_1D, sep=r"\s+")
+    covars = pd.read_csv(covars_1d, sep=r"\s+")
     if "wais_matrix" not in covars.columns:
-        sys.exit(f"[ERROR] 'wais_matrix' not in {COVARS_1D}; columns: {list(covars.columns)}")
+        sys.exit(f"[ERROR] 'wais_matrix' not in {covars_1d}; columns: {list(covars.columns)}")
     covars["X"] = covars["X"].astype(str).str.strip()
     wais = covars[["X", "wais_matrix"]].rename(columns={"X": "id"})
 
     # ── sud from xlsx (binarize) ─────────────────────────────────────────────
-    xlsx   = pd.read_excel(XLSX)
+    xlsx   = pd.read_excel(workbook_path)
     sa_col = "substance abuse "
     if sa_col not in xlsx.columns:
         candidates = [c for c in xlsx.columns if "substance" in c.lower()]
-        sys.exit(f"[ERROR] '{sa_col}' not in {XLSX}; candidates: {candidates}")
+        sys.exit(f"[ERROR] '{sa_col}' not in {workbook_path}; candidates: {candidates}")
     sud = xlsx[["Unnamed: 0", sa_col]].copy()
     sud.columns = ["id", "sud_raw"]
     sud["id"]   = sud["id"].astype(str).str.strip()
@@ -121,12 +120,15 @@ def augment_one(in_path: Path, out_path: Path, lookup: pd.DataFrame) -> None:
 
 
 def main() -> int:
+    repo_root = Path(__file__).resolve().parents[1]
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--input-dir",  default="analysis_2026-06-26",
                     help="Directory containing the original *_allchannels.csv files")
     ap.add_argument("--output-dir", default=".",
                     help="Where to write the augmented *_allchannels.csv files")
+    ap.add_argument("--data-aux", type=Path, default=repo_root.parent / "data_aux",
+                    help="Directory containing covars.1D and the Mindata workbook")
     args = ap.parse_args()
 
     in_dir  = Path(args.input_dir).resolve()
@@ -134,8 +136,8 @@ def main() -> int:
 
     print(f"[INFO] Input  dir : {in_dir}")
     print(f"[INFO] Output dir : {out_dir}")
-    print(f"[INFO] Loading lookups from {COVARS_1D.name} and {XLSX.name} ...")
-    lookup = load_lookups()
+    print(f"[INFO] Loading lookups from {args.data_aux} ...")
+    lookup = load_lookups(args.data_aux)
     print(f"[INFO] Lookup table: {len(lookup)} subjects "
           f"(non-null sud: {lookup['sud'].notna().sum()}, "
           f"non-null wais_matrix: {lookup['wais_matrix'].notna().sum()})\n")

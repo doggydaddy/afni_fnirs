@@ -194,13 +194,14 @@ redone yet):
      one channel from a near-zero-captured, wrongly-offset block) - none
      remain, full range now -0.066 to 0.026 (na-hard-easy) / -0.016 to
      0.009 (na-corsi) across all subjects x channels
-  6. sublists, beta dumps, and group-level comparisons (04p5_secondlevel_
-     group_na/) all redone - subject counts back to the full raw totals
+  6. sublists, beta dumps, and na group-level comparisons
+     (`04_secondlevel_group/analysis_na_2026-08-17/`) all redone - subject
+     counts back to the full raw totals
      (con 85, lrv 77, pcon 67 on hbo), vs. 82/74/64 before
 
 Group-level results changed substantially post-fix (previously null across
-all 6 comparisons; see 04p5_secondlevel_group_na/dumpFirstLevel_betaCoefs/
-results_*/ for full per-channel tables):
+all 6 comparisons; see `04_secondlevel_group/analysis_na_2026-08-17/`
+for full per-channel tables):
   - PSD+AGG vs HC, na-hard-easy: 3 clusters significant (cluster-perm) -
     Ch3 (p=.008), Ch6-7 (p=.003), Ch9-16 (p=.045); most of that same
     channel range also survives FDR/perm-max-stat individually
@@ -211,8 +212,9 @@ results_*/ for full per-channel tables):
 
 Given the scale of this fix (every subject's regressor timing was wrong to
 some degree, ranging 12-232s), the OLD amplitude-modulated first-level
-model and every prior group-level analysis (04_secondlevel_group/
-dumpFirstLevel_betaCoefs/analysis_2026-06-26, 2026-06-27, 2026-07-04) were
+model and every prior group-level analysis
+(`04_secondlevel_group/analysis_2026-06-26`, `analysis_2026-06-27`, and
+`analysis_2026-07-04`) were
 built on the same misaligned timing and should be treated as unreliable
 until/unless rerun with corrected timing.1D. Not yet done as of this entry.
 
@@ -263,7 +265,7 @@ folder counts.
 
 Group-level results (sans/saps excluded; HC comparisons: wais_matrix, sud;
 PSD+AGG vs PSD-AGG: wais_matrix, sud, dose) - see
-04_secondlevel_group/dumpFirstLevel_betaCoefs/analysis_2026-08-17/:
+04_secondlevel_group/analysis_2026-08-17/:
   - PSD+AGG vs HC: no significant channels or clusters (hard-easy or corsi)
   - PSD-AGG vs HC: no significant channels or clusters (hard-easy or corsi)
   - PSD+AGG vs PSD-AGG, corsi: Ch15-16 cluster significant (p=.049);
@@ -277,5 +279,4 @@ data, so this is read as the two parameterizations differing in
 sensitivity/power (na's 4 separate static-amplitude block regressors vs.
 this model's 2 merged, corsi-score-amplitude-modulated regressors) rather
 than either being wrong - not yet reconciled/interpreted further.
-
 

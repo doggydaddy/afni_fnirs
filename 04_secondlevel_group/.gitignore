@@ -1,6 +1,16 @@
-# archives
-*archives*
-# subject related information (sensitive)
-*sublist*
-# analysis notes
+# Generated or sensitive local data
+archives/
+analysis_*/
+results_*/
+*.sublist.txt
 analysis_notes.txt
+select.cov*.1D
+*_allchannels.csv
+*_allregions.csv
+report.md
+report.html
+report_regions.md
+report_regions.html
+run_*.log
+test_output.csv
+*.bak
