@@ -27,11 +27,9 @@ stage: raw fnirsoft exports -> `<subj>.<type>.<task>.fnirs.nii` (01) ->
 the task analyzed throughout this pipeline) or `gonogo` (converted, not
 analyzed downstream).
 
-For the full narrative of a major timing bug found and fixed in this
-pipeline on 2026-08-17 (every subject's block onsets were offset from the
-actual recording by a per-subject amount), see
-`analysis_2026-08-17/analysis_report_2026-08-17.md`. The technical
-descriptions below reflect the pipeline as it stands after that fix.
+The technical descriptions below reflect the pipeline after the timing
+correction applied on 2026-08-17. Sensitive analysis reports and generated
+results are stored outside this repository.
 
 ---
 
@@ -387,9 +385,6 @@ anatomical reference, used by `05_make_figure` for rendering context.
 
 `notes.txt` — running, dated log of decisions, data-quality issues found,
 and their resolutions; read before assuming any given result is final.
-Dated `analysis_<date>/` folders (inside `dumpFirstLevel_betaCoefs/` and at
-the repo root) hold point-in-time snapshots of group-analysis output —
-treat later dates as superseding earlier ones for the same comparisons
-unless a specific reason is given not to (e.g. `notes.txt` 2026-08-17: all
-analyses before that date used a since-fixed, systematically misaligned
-first-level timing).
+Generated analysis snapshots, reports, and figures may contain sensitive
+information and must be kept outside the repository. Root-level `archives/`
+and `analysis_<date>/` directories are ignored as an additional safeguard.

@@ -26,8 +26,6 @@ reproducible analysis figures.
 - `fNIRS_template_mask.nii`: mask applied to generated overlays.
 - `brain.nii`, `results_template.csv`, and `toTemplate.ipynb`: legacy manual
   workflow resources.
-- `archives/`: historical inputs and figures; do not use these as current
-  analysis results.
 
 ## Requirements
 
@@ -71,13 +69,15 @@ and its matching FDR boolean column.
 
 ## Recommended usage
 
-Run commands from `05_make_figure`.
+Run commands from `05_make_figure`. Write outputs to a private analysis
+directory outside the repository because figures and audit files may contain
+sensitive results.
 
 ### 1. Create NIfTI overlays and audits only
 
 ```bash
 ./run_auto_suma_figures.sh \
-  --out-dir ../analysis_2026-08-17/figures_cluster_fwer \
+  --out-dir /path/to/private-analysis/figures_cluster_fwer \
   --stat-col ancova_t \
   --significance-bool-col ancova_p_cluster_sig \
   --significance-mode bool \
@@ -92,7 +92,7 @@ Add `--suma-spec`:
 
 ```bash
 ./run_auto_suma_figures.sh \
-  --out-dir ../analysis_2026-08-17/figures_cluster_fwer \
+  --out-dir /path/to/private-analysis/figures_cluster_fwer \
   --stat-col ancova_t \
   --significance-bool-col ancova_p_cluster_sig \
   --significance-mode bool \
@@ -110,7 +110,7 @@ the correct significance column:
 
 ```bash
 ./run_auto_suma_figures.sh \
-  --out-dir ../analysis_2026-08-17/figures_interactions_fdr \
+  --out-dir /path/to/private-analysis/figures_interactions_fdr \
   --stat-col int_wais_matrix_t \
   --significance-bool-col int_wais_matrix_sig \
   --significance-mode bool \

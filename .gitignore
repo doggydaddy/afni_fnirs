@@ -20,6 +20,8 @@ __pycache__/
 **/.DS_Store
 
 # Generated analysis outputs (any depth)
+/archives/
+/analysis_*/
 **/results_*/
 **/auto_suma_outputs*/
 **/analysis_*/figures_*/
