@@ -6,11 +6,26 @@
 __pycache__/
 *.pyc
 
-# Combined analysis reports (top-level, e.g. analysis_<date>/) - the
-# generated stats report is excluded, matching the analysis_*/ exclusion
-# convention used inside dumpFirstLevel_betaCoefs/ for per-subject-derived
-# aggregate output. The narrative report and generator script are kept.
-/analysis_*/report.md
-/analysis_*/report.html
+# Local agent, editor, and tool metadata (any depth)
+**/.agents/
+**/.codex/
+**/.git/
+**/.idea/
+**/.vscode/
+**/.ipynb_checkpoints/
+**/.mypy_cache/
+**/.pytest_cache/
+**/.ruff_cache/
+.DS_Store
+**/.DS_Store
 
-
+# Generated analysis outputs (any depth)
+**/results_*/
+**/auto_suma_outputs*/
+**/analysis_*/figures_*/
+**/analysis_*/*_allchannels.csv
+**/analysis_*/*_allregions.csv
+**/analysis_*/report.md
+**/analysis_*/report.html
+**/analysis_*/FIGURES.md
+run_*.log
