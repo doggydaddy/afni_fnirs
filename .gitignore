@@ -19,6 +19,9 @@ __pycache__/
 .DS_Store
 **/.DS_Store
 
+# Manuscript drafts (Word docs, not source-controlled content)
+/manuscript/
+
 # Generated analysis outputs (any depth)
 /archives/
 /analysis_*/
@@ -31,3 +34,4 @@ __pycache__/
 **/analysis_*/report.html
 **/analysis_*/FIGURES.md
 run_*.log
+/post_hoc_power_results.csv
